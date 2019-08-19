@@ -1,21 +1,9 @@
 <template>
   <div class="about">
-    About view
-      <p>
-        <ui-button>Raised</ui-button>
-        <ui-button color="primary">Raised primary</ui-button>
-      </p>
-      <p>
-          <ui-radio-group
-                  name="icon_position"
-                  :options="['left', 'right']"
-                  v-model="position">Icon Position</ui-radio-group>
-      </p>
-      <p>
-          <ui-switch v-model="loading">
-              Loading: <code>{{ loading ? 'true' : 'false' }}</code>
-          </ui-switch>
-      </p>
+    <h3>Flexbox testing</h3>
+    <div class="test-flex">
+        <div v-for="i in 3">{{ i }}</div>
+    </div>
   </div>
 </template>
 
@@ -34,3 +22,16 @@
         }
     }
 </script>
+
+<style lang="scss" scoped>
+    .test-flex{
+        display: flex;
+        flex-direction: row;
+        > div{
+            @include bg('secondary');
+            @include color('white');
+
+            padding: 1rem;
+        }
+    }
+</style>

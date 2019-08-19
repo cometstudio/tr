@@ -39,5 +39,7 @@
     h3{
         font-weight: 500;
         font-size: 1.2rem;
+        line-height: 1.4em;
+        margin-bottom: 2rem;
     }
 </style>

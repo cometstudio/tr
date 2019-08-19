@@ -1,6 +1,6 @@
 module.exports = {
     devServer: {
-        proxy: 'http://tr.local'
+        proxy: 'http://tr.local',
     },
     pluginOptions: {
         // html: {
