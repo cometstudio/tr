@@ -7,7 +7,6 @@ Homestead.yaml
 composer.phar
 
 /vendor
-/src
 /dist
 /node_modules
 *.env

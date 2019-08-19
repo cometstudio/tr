@@ -1,0 +1,24 @@
+/* Transitions */
+$animationDuration: 0.5s;
+$animationDurationFast: 0.2s;
+
+/* Color palette */
+$palette: (
+    'white': #fff,
+    'black': #404040,
+    'gray': #f6f6f6,
+    'gray--dark': #ededed,
+    'gray--light': #fbfbfb,
+    'primary': #244c99,
+    'secondary': #ff4f58,
+    'success': #72bc59,
+    'warning': #ff9904,
+    'alert': #ff4f58,
+);
+
+/* Devices width */
+$tabletsMaxWidth: 1024px;
+$mobileMaxWidth: 768px;
+
+$brand-primary-color: map_get($palette, 'primary');
+$brand-accent-color: map_get($palette, 'secondary');

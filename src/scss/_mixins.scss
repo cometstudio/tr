@@ -1,0 +1,17 @@
+@mixin clearfix() {
+  &::after {
+    display: block;
+    content: "";
+    clear: both;
+  }
+}
+
+// Colors
+@mixin bg($name)
+{
+  background-color: map-get($palette, $name);
+}
+@mixin color($name)
+{
+  color: map-get($palette, $name);
+}
