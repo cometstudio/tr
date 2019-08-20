@@ -38,11 +38,11 @@
                         this.$store.dispatch('setApiToken', response.data.apiToken)
                         this.$store.dispatch('setUser', response.data.user)
 
-                        this.$store.dispatch('loadEnds')
-
                         this.$router.push('/')
                     }).catch((err) => {
-                        this.$Progress.fail()
+
+                    }).then(()=>{
+                        this.$store.dispatch('loadEnds')
                     })
             }
         }

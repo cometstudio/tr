@@ -11,6 +11,7 @@ composer.phar
 /node_modules
 *.env
 *.sql
+*.lock
 
 # Editor directories and files
 .idea

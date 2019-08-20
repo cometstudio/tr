@@ -1,6 +1,7 @@
 <template>
     <div class="layout layout--default">
         <Header></Header>
+        <Alerts></Alerts>
         <main>
             <router-view />
         </main>
@@ -9,6 +10,7 @@
 
 <script>
     import Header from '../components/layout/Header'
+    import Alerts from '../components/layout/Alerts'
     import Footer from '../components/layout/Footer'
 
     export default {
@@ -19,6 +21,7 @@
         },
         components: {
             Header,
+            Alerts,
             Footer,
         }
     }

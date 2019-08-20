@@ -3,7 +3,6 @@
       <component :is="layout">
           <router-view />
       </component>
-      <vue-progress-bar></vue-progress-bar>
   </div>
 </template>
 

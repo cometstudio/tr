@@ -1,7 +1,18 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import * as types from './mutation_types';
+
 Vue.use(Vuex)
+
+
+const defaultAlert = () => {
+    return {
+        timeout: undefined,
+        type: 'success',
+        content: String
+    }
+}
 
 const defaultUser = () => {
     return {
@@ -13,6 +24,7 @@ const defaultUser = () => {
 const defaultState = () => {
     return {
         loading: false,
+        alerts: [],
         locale: 'ru',
         apiToken: null,
         user: defaultUser()
@@ -25,6 +37,9 @@ export default new Vuex.Store({
       loading: state => {
           return state.loading
       },
+      alerts: state => {
+          return state.alerts
+      },
       locale: state => {
           return state.locale
       },
@@ -34,28 +49,26 @@ export default new Vuex.Store({
   },
   mutations: {
       reset: state => {
-          // Clear the local storage
-          window.localStorage.clear()
-          // Set default app state
           Object.assign(state, defaultState())
-
-          console.log(state)
       },
       setLoading: (state, visible) => {
           state.loading = visible
       },
-      setLocale: (state, locale) => {
-          if(locale === undefined){
-              // Get locale being stored
-              let storedLocale = window.localStorage.getItem('locale')
-              // Set state locale if stored
-              if(storedLocale !== null) state.locale = storedLocale
+      [types.RESET_ALERTS](state){
+          state.alerts = []
+      },
+      [types.PUSH_ALERT](state, alert){
+          state.alerts.push(alert)
+      },
+      [types.DISMISS_ALERT](state, index){
+          if(index === undefined){
+              state.alerts.shift()
           }else{
-              // Save locale in the local storage
-              window.localStorage.setItem('locale', locale)
-              // Set state locale
-              state.locale = locale
+              state.alerts.splice(index, 1)
           }
+      },
+      setLocale: (state, locale) => {
+          state.locale = locale
       },
       setApiToken: (state, apiToken) => {
           if(apiToken === undefined){
@@ -84,16 +97,45 @@ export default new Vuex.Store({
   },
   actions: {
       reset: context => {
+          window.localStorage.clear()
           context.commit('reset')
       },
-      loadBegins: (context) => {
+      loadBegins: context => {
           context.commit('setLoading', true)
+      },
+      resetAlerts: ({ commit }, payload) => {
+          commit(types.RESET_ALERTS, payload)
+      },
+      pushAlert: ({ commit }, payload) => {
+          const alert = Object.assign(defaultAlert(), payload)
+
+          return new Promise((resolve) => {
+              commit(types.PUSH_ALERT, alert)
+
+              setTimeout(() => {
+                  commit(types.DISMISS_ALERT)
+                  resolve()
+              }, 3000)
+          })
+      },
+      dismissAlert: ({ commit }, index) => {
+          commit(types.DISMISS_ALERT, index)
       },
       loadEnds: (context) => {
           context.commit('setLoading', false)
       },
-      setLocale: (context, payload) => {
-          context.commit('setLocale', payload)
+      setLocale: (context, locale) => {
+          if(locale === undefined){
+              // Get locale being stored
+              let storedLocale = window.localStorage.getItem('locale')
+              // Set state locale if stored
+              if(storedLocale !== null) context.commit('setLocale', storedLocale)
+          }else{
+              // Save locale in the local storage
+              window.localStorage.setItem('locale', locale)
+              // Set state locale
+              context.commit('setLocale', locale)
+          }
       },
       setUser: (context, payload) => {
           context.commit('setUser', payload)
