@@ -21,13 +21,6 @@ Vue.use(VueLodash)
 require('./vue-fontawesome')
 require('./keen-ui')
 
-import VueProgressBar from 'vue-progressbar'
-Vue.use(VueProgressBar, {
-    color: 'yellow',
-    failedColor: 'red',
-    thickness: '1px'
-})
-
 require('./layouts')
 
 new Vue({

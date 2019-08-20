@@ -70,13 +70,13 @@
             getRegions()
             {
                 // Show the progress bar
-                this.$Progress.start()
+                this.$store.dispatch('loadBegins')
 
                 this.$axios.get('/api/regions')
                 // Success
                     .then((res) => {
                         // Hide the progress bar
-                        this.$Progress.finish()
+                        this.$store.dispatch('loadEnds')
                         // Set data
                         this.regions = res.data
                         // Set regions from the URL

@@ -1,3 +1,5 @@
+<i18n src="@/i18n/user.json"></i18n>
+
 <template>
     <header class="header">
         <ui-toolbar
@@ -28,9 +30,13 @@
             </div>
 
             <div slot="actions">
-                <nav>
-                    <span>Guest</span>
-                    <router-link to="browser">Login</router-link>
+                <nav v-if="user.id === null">
+                    <span>{{ $t('data.name') }}</span>
+                    <router-link :to="{ name: 'login'}">{{ $t('auth.login') }}</router-link>
+                </nav>
+                <nav v-else>
+                    <span>{{ user.name }}</span>
+                    <a href="" @click.prevent="logout">{{ $t('auth.logout') }}</a>
                 </nav>
             </div>
         </ui-toolbar>
@@ -48,11 +54,18 @@
             },
             isBrowser(){
                 return this.$route.name === 'browser'
+            },
+            user(){
+                return this.$store.getters.user
             }
         },
         methods: {
             stepBack(){
                 window.history.length > 1 ? this.$router.back() : this.$router.push('/')
+            },
+            logout(){
+                this.$store.dispatch('reset')
+                this.$router.push('login')
             }
         }
     }

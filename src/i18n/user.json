@@ -1,0 +1,26 @@
+{
+  "en": {
+    "auth":{
+      "login": "Login",
+      "loginButton": "Log in",
+      "logout": "Logout"
+    },
+    "data": {
+      "name": "Guest",
+      "email": "Email",
+      "password": "Password"
+    }
+  },
+  "ru": {
+    "auth":{
+      "login": "Войти",
+      "loginButton": "Войти",
+      "logout": "Выйти"
+    },
+    "data": {
+      "name": "Гость",
+      "email": "E-mail",
+      "password": "Пароль"
+    }
+  }
+}
