@@ -5,6 +5,15 @@ import * as types from './mutation_types';
 
 Vue.use(Vuex)
 
+const defaultState = () => {
+    return {
+        loading: 0,
+        alerts: [],
+        locale: 'ru',
+        apiToken: null,
+        user: defaultUser()
+    }
+}
 
 const defaultAlert = () => {
     return {
@@ -21,21 +30,11 @@ const defaultUser = () => {
     }
 }
 
-const defaultState = () => {
-    return {
-        loading: false,
-        alerts: [],
-        locale: 'ru',
-        apiToken: null,
-        user: defaultUser()
-    }
-}
-
 export default new Vuex.Store({
   state: defaultState(),
   getters: {
       loading: state => {
-          return state.loading
+          return state.loading > 0
       },
       alerts: state => {
           return state.alerts
@@ -51,8 +50,9 @@ export default new Vuex.Store({
       reset: state => {
           Object.assign(state, defaultState())
       },
-      setLoading: (state, visible) => {
-          state.loading = visible
+      setLoading: (state, value) => {
+          state.loading += value
+          console.log(state.loading)
       },
       [types.RESET_ALERTS](state){
           state.alerts = []
@@ -101,7 +101,10 @@ export default new Vuex.Store({
           context.commit('reset')
       },
       loadBegins: context => {
-          context.commit('setLoading', true)
+          context.commit('setLoading', 1)
+      },
+      loadEnds: (context) => {
+          context.commit('setLoading', -1)
       },
       resetAlerts: ({ commit }, payload) => {
           commit(types.RESET_ALERTS, payload)
@@ -120,9 +123,6 @@ export default new Vuex.Store({
       },
       dismissAlert: ({ commit }, index) => {
           commit(types.DISMISS_ALERT, index)
-      },
-      loadEnds: (context) => {
-          context.commit('setLoading', false)
       },
       setLocale: (context, locale) => {
           if(locale === undefined){

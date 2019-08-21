@@ -75,8 +75,6 @@
                 this.$axios.get('/api/regions')
                 // Success
                     .then((res) => {
-                        // Hide the progress bar
-                        this.$store.dispatch('loadEnds')
                         // Set data
                         this.regions = res.data
                         // Set regions from the URL
@@ -86,8 +84,9 @@
                         // Failed
                     }).catch((err) => {
                         console.log(err)
-                        // Switch to the error progress bar
-                        this.$Progress.fail()
+                    }).then(()=>{
+                        // Hide the progress bar
+                        this.$store.dispatch('loadEnds')
                     })
             },
             onRegionChange(){
