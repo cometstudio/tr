@@ -32,6 +32,8 @@
 </template>
 
 <script>
+    import { mapActions } from 'vuex'
+
     const filter = () => {
         return {
             on: false,
@@ -58,11 +60,13 @@
             //this.$watch('filter.form', this.filterUpdated, {deep: true})
         },
         methods: {
+            ...mapActions([
+               'loading'
+            ]),
             resetFilter(){
                 this.filter = filter()
             },
             filterUpdated(newV, oldV) {
-                console.log('filter updated', newV)
                 this.filter.on = true
 
                 //this.getProperties()
@@ -70,7 +74,7 @@
             getRegions()
             {
                 // Show the progress bar
-                this.$store.dispatch('loadBegins')
+                this.loading()
 
                 this.$axios.get('/api/regions')
                 // Success
@@ -83,18 +87,17 @@
                         this.onRegionChange()
                         // Failed
                     }).catch((err) => {
-                        console.log(err)
+                        //console.log(err)
                     }).then(()=>{
-                        // Hide the progress bar
-                        this.$store.dispatch('loadEnds')
+                        this.loading(false)
                     })
             },
             onRegionChange(){
-                console.log(this.filter.form)
+                //console.log(this.filter.form)
                 // Set data
                 if(this.filter.form.regions !== null && this.filter.form.regions.length){
                     this.filter.form.regions.every((v)=>{
-                        console.log(v)
+                        //console.log(v)
                         //this.districts.push(this.regions[this.filter.form.region].districts)
                     })
 
@@ -105,7 +108,7 @@
             getProperties()
             {
                 // Show the progress bar
-                this.$Progress.start()
+                this.$store.dispatch('loading')
 
                 this.$axios.get('/api/properties', {params: this.filter.form })
                     // Success
@@ -118,7 +121,9 @@
                     }).catch((err) => {
                         // Switch to the error progress bar
                         this.$Progress.fail()
-                })
+                    }).then(()=>{
+                        this.$store.dispatch('loading', false)
+                    })
             }
         }
     }

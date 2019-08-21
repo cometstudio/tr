@@ -20,6 +20,8 @@
 </template>
 
 <script>
+    import { mapActions } from 'vuex'
+
     export default {
         data () {
             return {
@@ -30,8 +32,12 @@
             }
         },
         methods: {
+            ...mapActions([
+                'loading',
+                'pushAlert'
+            ]),
             authenticate () {
-                this.$store.dispatch('loadBegins')
+                this.loading()
 
                 this.$axios.post('/api/user/login', this.auth)
                     .then((response) => {
@@ -39,10 +45,10 @@
                         this.$store.dispatch('setUser', response.data.user)
 
                         this.$router.push('/')
-                    }).catch((err) => {
-
+                    }).catch((error) => {
+                        this.pushAlert(error.response.data)
                     }).then(()=>{
-                        this.$store.dispatch('loadEnds')
+                        this.loading(false)
                     })
             }
         }

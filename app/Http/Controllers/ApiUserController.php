@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\UnauthorizedException;
 use Auth;
 use Log;
-use Illuminate\Support\Str;
+use App\Models\Alert;
 
 class ApiUserController extends Controller
 {
@@ -19,7 +19,7 @@ class ApiUserController extends Controller
             ]);
 
             if(Auth::attempt($credentials + ['disabled' => 0])) {
-                // Authentication passed...
+                // Passed
                 $User = Auth::user();
 
                 $data = [
@@ -33,11 +33,11 @@ class ApiUserController extends Controller
                 return response()->json($data);
             }else throw new UnauthorizedException;
         }catch (\Exception $e){
-            return response()->json([
-                'error'=>[
-                    'message'=>'Unauthorized '.$e->getFile() . ' at ' . $e->getLine() . ' with '.$e->getMessage()
-                ]
-            ], 401);
+            $Alert = new Alert();
+
+            $Alert->error($e);
+
+            return response()->json($Alert, $Alert->code);
         }
     }
 }
