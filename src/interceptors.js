@@ -3,9 +3,8 @@ import axios from "axios";
 axios.interceptors.request.use(function (config) {
     config.headers.Accept = 'application/json';
 
-    // Fetch a token from local storage and attach it (if exists) to the Authorization header on EVERY request.
-    let apiToken = window.localStorage.getItem('apiToken')
-    if (apiToken !== null) config.headers.Authorization = `Bearer ${apiToken}`;
+    let api_token = window.localStorage.getItem('api_token')
+    if (api_token !== null) config.headers.Authorization = `Bearer ${api_token}`;
 
     return config;
 }, function (error) {

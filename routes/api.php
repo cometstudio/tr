@@ -21,7 +21,8 @@ use Illuminate\Http\Request;
 Route::pattern('id', '[0-9]+');
 // Authenticate
 Route::prefix('user')->name('user.')->group(function () {
-    Route::post('/login', 'ApiUserController@login')->name('login');
+    Route::post('/signup', 'UserController@signup')->name('signup');
+    Route::post('/login', 'UserController@login')->name('login');
 });
 // Regions
 Route::prefix('regions')->name('regions.')->group(function () {

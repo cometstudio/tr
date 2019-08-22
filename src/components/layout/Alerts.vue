@@ -3,8 +3,6 @@
         <ui-alert @dismiss="dismiss(index)" v-for="(alert, index) in alerts" :type="alert.type">
             {{ alert.message }}
         </ui-alert>
-        <ui-button @click="push">Push an alert</ui-button>
-        <ui-button @click="reset">Remove all alerts</ui-button>
     </div>
 </template>
 
@@ -31,7 +29,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>

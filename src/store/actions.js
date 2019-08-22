@@ -1,5 +1,6 @@
 import * as types from "./types"
 import { defaultAlert } from './defaults'
+import axios from 'axios'
 
 export default {
     reset: ({commit}) => {
@@ -52,5 +53,39 @@ export default {
     },
     setApiToken: (context, payload) => {
         context.commit('setApiToken', payload)
+    },
+    signup: ({dispatch}, payload)=>{
+        return new Promise((resolve, reject) => {
+            dispatch('loading')
+
+            axios.post('/api/user/signup', payload)
+                .then((response) => {
+                    dispatch('setApiToken', response.data.api_token)
+                    dispatch('setUser', response.data.user)
+                    resolve()
+                }).catch((error) => {
+                    dispatch('pushAlert', error.response.data)
+                    reject()
+            }).then(()=>{
+                dispatch('loading', false)
+            })
+        })
+    },
+    login: ({dispatch}, payload)=>{
+        return new Promise((resolve, reject) => {
+            dispatch('loading')
+
+            axios.post('/api/user/login', payload)
+                .then((response) => {
+                    dispatch('setApiToken', response.data.api_token)
+                    dispatch('setUser', response.data.user)
+                    resolve()
+                }).catch((error) => {
+                    dispatch('pushAlert', error.response.data)
+                    reject()
+            }).then(()=>{
+                dispatch('loading', false)
+            })
+        })
     }
 }

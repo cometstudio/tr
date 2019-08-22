@@ -2,7 +2,7 @@
 
 <template>
     <div class="login">
-        <h3>{{ $t('user.login') }}</h3>
+        <h3>{{ $t('user.signup') }}</h3>
         <form class="form" @submit.prevent="authenticate">
             <ui-textbox
                     floating-label
@@ -33,10 +33,10 @@
         },
         methods: {
             ...mapActions([
-                'login'
+                'signup',
             ]),
             authenticate () {
-                this.login(this.auth).then(()=>{
+                this.signup(this.auth).then(()=>{
                     this.$router.push({name: 'properties'})
                 })
             }

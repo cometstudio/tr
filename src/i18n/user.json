@@ -1,26 +1,22 @@
 {
   "en": {
-    "auth":{
-      "login": "Login",
-      "loginButton": "Log in",
-      "logout": "Logout"
-    },
-    "data": {
+    "user": {
       "name": "Guest",
       "email": "Email",
-      "password": "Password"
+      "password": "Password",
+      "signup": "signup",
+      "login": "Login",
+      "logout": "Logout"
     }
   },
   "ru": {
-    "auth":{
-      "login": "Войти",
-      "loginButton": "Войти",
-      "logout": "Выйти"
-    },
-    "data": {
+    "user": {
       "name": "Гость",
       "email": "E-mail",
-      "password": "Пароль"
+      "password": "Пароль",
+      "signup": "signup",
+      "login": "Войти",
+      "logout": "Выйти"
     }
   }
 }

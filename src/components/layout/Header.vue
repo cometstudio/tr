@@ -31,12 +31,13 @@
 
             <div slot="actions">
                 <nav v-if="user.id === null">
-                    <span>{{ $t('data.name') }}</span>
-                    <router-link :to="{ name: 'login'}">{{ $t('auth.login') }}</router-link>
+                    <span>{{ $t('user.name') }}</span>
+                    <router-link :to="{ name: 'signup'}">{{ $t('user.signup') }}</router-link>
+                    <router-link :to="{ name: 'login'}">{{ $t('user.login') }}</router-link>
                 </nav>
                 <nav v-else>
                     <span>{{ user.name }}</span>
-                    <a href="" @click.prevent="logout">{{ $t('auth.logout') }}</a>
+                    <a href="" @click.prevent="logout">{{ $t('user.logout') }}</a>
                 </nav>
             </div>
         </ui-toolbar>
