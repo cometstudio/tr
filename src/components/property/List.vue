@@ -55,8 +55,8 @@
             }
         },
         created(){
-            this.resetFilter()
-            this.getRegions()
+            //this.resetFilter()
+            //this.getRegions()
             //this.$watch('filter.form', this.filterUpdated, {deep: true})
         },
         methods: {

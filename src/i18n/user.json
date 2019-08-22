@@ -14,7 +14,7 @@
       "name": "Гость",
       "email": "E-mail",
       "password": "Пароль",
-      "signup": "signup",
+      "signup": "Зарегистрироваться",
       "login": "Войти",
       "logout": "Выйти"
     }

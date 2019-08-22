@@ -32,7 +32,6 @@
             <div slot="actions">
                 <nav v-if="user.id === null">
                     <span>{{ $t('user.name') }}</span>
-                    <router-link :to="{ name: 'signup'}">{{ $t('user.signup') }}</router-link>
                     <router-link :to="{ name: 'login'}">{{ $t('user.login') }}</router-link>
                 </nav>
                 <nav v-else>

@@ -60,32 +60,31 @@ export default {
 
             axios.post('/api/user/signup', payload)
                 .then((response) => {
-                    dispatch('setApiToken', response.data.api_token)
-                    dispatch('setUser', response.data.user)
-                    resolve()
+                    dispatch('login', payload)
+                    resolve(response.data.user)
                 }).catch((error) => {
                     dispatch('pushAlert', error.response.data)
-                    reject()
-            }).then(()=>{
-                dispatch('loading', false)
-            })
+                    reject(error)
+                }).then(()=>{
+                    dispatch('loading', false)
+                })
         })
     },
-    login: ({dispatch}, payload)=>{
+    login: ({dispatch, commit}, payload)=>{
         return new Promise((resolve, reject) => {
-            dispatch('loading')
+            commit(types.SET_LOADING, 1)
 
             axios.post('/api/user/login', payload)
                 .then((response) => {
-                    dispatch('setApiToken', response.data.api_token)
-                    dispatch('setUser', response.data.user)
-                    resolve()
+                    commit('setApiToken', response.data.api_token)
+                    commit('setUser', response.data.user)
+                    resolve(response.data.user)
                 }).catch((error) => {
-                    dispatch('pushAlert', error.response.data)
-                    reject()
-            }).then(()=>{
-                dispatch('loading', false)
-            })
+                    commit('pushAlert', error.response.data)
+                    reject(error)
+                }).then(()=>{
+                    commit(types.SET_LOADING, -1)
+                })
         })
     }
 }

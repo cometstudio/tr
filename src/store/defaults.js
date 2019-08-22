@@ -3,7 +3,7 @@ export const defaultState = () => {
         loading: 0,
         alerts: [],
         locale: 'ru',
-        apiToken: null,
+        api_token: null,
         user: defaultUser()
     }
 }
@@ -19,7 +19,6 @@ export const defaultAlert = () => {
 export const defaultUser = () => {
     return {
         id: null,
-        name: 'guest',
-        apiToken: 'guest'
+        name: 'guest'
     }
 }

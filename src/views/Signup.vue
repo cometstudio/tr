@@ -14,7 +14,7 @@
                     type="password"
                     placeholder="Enter a password"
                     v-model="auth.password">{{ $t('user.password') }}</ui-textbox>
-            <ui-button color="primary">{{ $t('user.login') }}</ui-button>
+            <ui-button color="primary">{{ $t('user.signup') }}</ui-button>
         </form>
     </div>
 </template>
@@ -36,9 +36,10 @@
                 'signup',
             ]),
             authenticate () {
-                this.signup(this.auth).then(()=>{
-                    this.$router.push({name: 'properties'})
-                })
+                this.signup(this.auth)
+                    .then(()=>{
+                        this.$router.push({name: 'properties'})
+                    }).catch((error)=>{})
             }
         }
     }
