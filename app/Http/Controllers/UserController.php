@@ -28,11 +28,9 @@ class UserController extends Controller
                         'name',
                     ])
                 ]);
-            }else throw new UnauthorizedException('Wrong credentials');
+            }else throw new UnauthorizedException('user.signup.failed', 401);
         }catch (\Exception $e){
-            $Alert = new Alert();
-
-            $Alert->error($e);
+            $Alert = (new Alert())->error($e);
 
             return response()->json($Alert, $Alert->code);
         }
@@ -55,11 +53,9 @@ class UserController extends Controller
                         'name',
                     ])
                 ]);
-            }else throw new UnauthorizedException('Wrong credentials');
+            }else throw new UnauthorizedException('user.login.failed', 401);
         }catch (\Exception $e){
-            $Alert = new Alert();
-
-            $Alert->error($e);
+            $Alert = (new Alert())->error($e);
 
             return response()->json($Alert, $Alert->code);
         }

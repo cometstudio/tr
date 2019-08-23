@@ -2,8 +2,8 @@
 
 <template>
     <div class="login">
-        <h3>{{ $t('user.login') }}</h3>
-        <form class="form" @submit.prevent="authenticate">
+        <h3>{{ $t('user.login.title') }}</h3>
+        <form class="form" @submit.prevent="login">
             <ui-textbox
                     floating-label
                     type="text"
@@ -14,10 +14,10 @@
                     type="password"
                     placeholder="Enter a password"
                     v-model="auth.password">{{ $t('user.password') }}</ui-textbox>
-            <ui-button color="primary">{{ $t('user.login') }}</ui-button>
+            <ui-button color="primary">{{ $t('user.login.button') }}</ui-button>
 
             <ul>
-                <li><router-link :to="{ name: 'signup'}">{{ $t('user.signup') }}</router-link></li>
+                <li><router-link :to="{ name: 'signup'}">{{ $t('user.signup.title') }}</router-link></li>
             </ul>
         </form>
     </div>
@@ -25,6 +25,7 @@
 
 <script>
     import { mapActions } from 'vuex'
+    import { LOGIN, PUSH_ERROR_ALERT } from "../store/types"
 
     export default {
         data () {
@@ -37,13 +38,18 @@
         },
         methods: {
             ...mapActions([
-                'login'
+                LOGIN,
+                PUSH_ERROR_ALERT,
             ]),
-            authenticate () {
-                this.login(this.auth)
+            login() {
+                this.LOGIN(this.auth)
                     .then(()=>{
                         this.$router.push({name: 'properties'})
-                    }).catch((error)=>{})
+                    }).catch((error)=>{
+                        this.PUSH_ERROR_ALERT({
+                            message: this.$t(error.response.data.message)
+                        })
+                    })
             }
         }
     }

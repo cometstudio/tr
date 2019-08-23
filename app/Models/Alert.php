@@ -8,12 +8,14 @@ use Illuminate\Database\Eloquent\Model;
  * Class Alert
  * @package App\Models
  * @property string $message
+ * @property string $type
  * @property int $code
  */
 class Alert extends Model
 {
     public $fillable = [
         'message',
+        'type',
         'code'
     ];
 
@@ -26,15 +28,26 @@ class Alert extends Model
 
     public function reset()
     {
-        $this->message = 'Error';
-        $this->code = 500;
+        $this->message = 'Success';
+        $this->type = 'success';
+        $this->code = 200;
+
+        return $this;
+    }
+
+    public function warning(\Exception $e)
+    {
+        $this->message = $e->getMessage() ? $e->getMessage() : 'warning';
+        $this->type = 'warning';
+        $this->code = $e->getCode() ? $e->getCode() : 500;
 
         return $this;
     }
 
     public function error(\Exception $e)
     {
-        $this->message = $e->getMessage() ? $e->getMessage() : 'Error';
+        $this->message = $e->getMessage() ? $e->getMessage() : 'error';
+        $this->type = 'error';
         $this->code = $e->getCode() ? $e->getCode() : 500;
 
         return $this;

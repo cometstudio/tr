@@ -2,8 +2,8 @@
 
 <template>
     <div class="login">
-        <h3>{{ $t('user.signup') }}</h3>
-        <form class="form" @submit.prevent="authenticate">
+        <h3>{{ $t('user.signup.title') }}</h3>
+        <form class="form" @submit.prevent="signup">
             <ui-textbox
                     floating-label
                     type="text"
@@ -14,13 +14,14 @@
                     type="password"
                     placeholder="Enter a password"
                     v-model="auth.password">{{ $t('user.password') }}</ui-textbox>
-            <ui-button color="primary">{{ $t('user.signup') }}</ui-button>
+            <ui-button color="primary">{{ $t('user.signup.button') }}</ui-button>
         </form>
     </div>
 </template>
 
 <script>
     import { mapActions } from 'vuex'
+    import { SIGNUP, PUSH_ERROR_ALERT } from "../store/types"
 
     export default {
         data () {
@@ -33,13 +34,18 @@
         },
         methods: {
             ...mapActions([
-                'signup',
+                SIGNUP,
+                PUSH_ERROR_ALERT,
             ]),
-            authenticate () {
-                this.signup(this.auth)
+            signup () {
+                this.SIGNUP(this.auth)
                     .then(()=>{
                         this.$router.push({name: 'properties'})
-                    }).catch((error)=>{})
+                    }).catch((error)=>{
+                    this.PUSH_ERROR_ALERT({
+                        message: this.$t(error.response.data.message)
+                    })
+                })
             }
         }
     }

@@ -1,12 +1,15 @@
 <template>
     <div class="alerts">
-        <ui-alert @dismiss="dismiss(index)" v-for="(alert, index) in alerts" :type="alert.type">
+        <ui-alert @dismiss="DISMISS_ALERT(index)" v-for="(alert, index) in alerts" :type="alert.type">
             {{ alert.message }}
         </ui-alert>
     </div>
 </template>
 
 <script>
+    import { mapActions } from 'vuex'
+    import { DISMISS_ALERT } from "@/store/types"
+
     export default {
         name: "Alerts",
         computed: {
@@ -15,17 +18,9 @@
             }
         },
         methods: {
-            reset(){
-                this.$store.dispatch('resetAlerts')
-            },
-            push(){
-                this.$store.dispatch('pushAlert', {
-                    content: 'Test error ' + Math.random()
-                })
-            },
-            dismiss(index){
-                this.$store.dispatch('dismissAlert', index)
-            }
+            ...mapActions([
+                DISMISS_ALERT
+            ])
         }
     }
 </script>

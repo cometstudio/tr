@@ -4,9 +4,19 @@
       "name": "Guest",
       "email": "Email",
       "password": "Password",
-      "signup": "signup",
-      "login": "Login",
-      "logout": "Logout"
+      "signup": {
+        "title": "Sign up",
+        "button": "Sign up",
+        "failed": "We cannot register you right now, give us a try later"
+      },
+      "login": {
+        "title": "Log in",
+        "button": "Log in",
+        "failed": "This user is not yet registered"
+      },
+      "logout": {
+        "button": "Log out"
+      }
     }
   },
   "ru": {
@@ -14,9 +24,19 @@
       "name": "Гость",
       "email": "E-mail",
       "password": "Пароль",
-      "signup": "Зарегистрироваться",
-      "login": "Войти",
-      "logout": "Выйти"
+      "signup": {
+        "title": "Зарегистрироваться",
+        "button": "Зарегистрироваться",
+        "failed": "Мы сейчас не можем вас зарегистрировать, попробуйте позже"
+      },
+      "login": {
+        "title": "Войти",
+        "button": "Войти",
+        "failed": "Указанный пользователь не зарегистрирован"
+      },
+      "logout": {
+        "button": "Выйти"
+      }
     }
   }
 }

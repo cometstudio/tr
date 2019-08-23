@@ -32,11 +32,11 @@
             <div slot="actions">
                 <nav v-if="user.id === null">
                     <span>{{ $t('user.name') }}</span>
-                    <router-link :to="{ name: 'login'}">{{ $t('user.login') }}</router-link>
+                    <router-link :to="{ name: 'login'}">{{ $t('user.login.button') }}</router-link>
                 </nav>
                 <nav v-else>
                     <span>{{ user.name }}</span>
-                    <a href="" @click.prevent="logout">{{ $t('user.logout') }}</a>
+                    <a href="" @click.prevent="logout">{{ $t('user.logout.button') }}</a>
                 </nav>
             </div>
         </ui-toolbar>
@@ -44,7 +44,10 @@
 </template>
 
 <script>
-    import UiButton from "keen-ui/src/UiButton";
+    import UiButton from "keen-ui/src/UiButton"
+    import { mapActions } from 'vuex'
+    import { RESET_STORE } from "@/store/types"
+
     export default {
         name: "Header",
         components: {UiButton},
@@ -60,12 +63,16 @@
             }
         },
         methods: {
+            ...mapActions([
+                RESET_STORE
+            ]),
             stepBack(){
                 window.history.length > 1 ? this.$router.back() : this.$router.push('/')
             },
             logout(){
-                this.$store.dispatch('reset')
-                this.$router.push('login')
+                this.RESET_STORE().then(()=>{
+                    this.$router.push({name: 'login'})
+                }).catch((error)=>{})
             }
         }
     }

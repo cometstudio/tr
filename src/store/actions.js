@@ -3,24 +3,17 @@ import { defaultAlert } from './defaults'
 import axios from 'axios'
 
 export default {
-    reset: ({commit}) => {
-        window.localStorage.clear()
-        commit(types.RESET)
+    [types.RESET_STORE]: ({commit}) => {
+        return new Promise((resolve) => {
+            window.localStorage.clear()
+            commit(types.RESET_STORE)
+            resolve()
+        })
     },
-    loading: ({ commit }, payload)=>{
-        switch (payload){
-            default:
-                commit(types.SET_LOADING, 1)
-            break
-            case false:
-                commit(types.SET_LOADING, -1)
-            break
-        }
-    },
-    resetAlerts: ({ commit }, payload) => {
+    [types.RESET_ALERTS]: ({ commit }, payload) => {
         commit(types.RESET_ALERTS, payload)
     },
-    pushAlert: ({ commit }, payload) => {
+    [types.PUSH_ALERT]: ({ commit }, payload) => {
         const alert = Object.assign(defaultAlert(), payload)
 
         return new Promise((resolve) => {
@@ -32,7 +25,17 @@ export default {
             }, 3000)
         })
     },
-    dismissAlert: ({ commit }, index) => {
+    [types.PUSH_ERROR_ALERT]: ({ dispatch }, payload) => {
+        const alert = Object.assign(defaultAlert(), {type: 'error'}, payload)
+
+        dispatch(types.PUSH_ALERT, alert)
+    },
+    [types.PUSH_WARNING_ALERT]: ({ dispatch }, payload) => {
+        const alert = Object.assign(defaultAlert(), {type: 'warning'}, payload)
+
+        dispatch(types.PUSH_ALERT, alert)
+    },
+    [types.DISMISS_ALERT]: ({ commit }, index) => {
         commit(types.DISMISS_ALERT, index)
     },
     setLocale: (context, locale) => {
@@ -54,25 +57,24 @@ export default {
     setApiToken: (context, payload) => {
         context.commit('setApiToken', payload)
     },
-    signup: ({dispatch}, payload)=>{
+    [types.SIGNUP]: ({ commit, dispatch }, payload)=>{
         return new Promise((resolve, reject) => {
-            dispatch('loading')
+            commit(types.START_LOADING)
 
             axios.post('/api/user/signup', payload)
                 .then((response) => {
-                    dispatch('login', payload)
-                    resolve(response.data.user)
+                    dispatch(types.LOGIN, payload)
+                    resolve(response)
                 }).catch((error) => {
-                    dispatch('pushAlert', error.response.data)
                     reject(error)
                 }).then(()=>{
-                    dispatch('loading', false)
+                    commit(types.STOP_LOADING)
                 })
         })
     },
-    login: ({dispatch, commit}, payload)=>{
+    [types.LOGIN]: ({ commit, dispatch }, payload)=>{
         return new Promise((resolve, reject) => {
-            commit(types.SET_LOADING, 1)
+            commit(types.START_LOADING)
 
             axios.post('/api/user/login', payload)
                 .then((response) => {
@@ -80,10 +82,9 @@ export default {
                     commit('setUser', response.data.user)
                     resolve(response.data.user)
                 }).catch((error) => {
-                    commit('pushAlert', error.response.data)
                     reject(error)
                 }).then(()=>{
-                    commit(types.SET_LOADING, -1)
+                    commit(types.STOP_LOADING)
                 })
         })
     }

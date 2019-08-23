@@ -1,12 +1,15 @@
 import * as types from "./types"
-import { defaultUser, defaultState } from './defaults'
+import {defaultState, defaultUser} from './defaults'
 
 export default {
-    [types.RESET](state){
+    [types.RESET_STORE](state){
         Object.assign(state, defaultState())
     },
-    [types.SET_LOADING](state, value){
-        state.loading += value
+    [types.START_LOADING](state){
+        state.loading += 1
+    },
+    [types.STOP_LOADING](state){
+        state.loading -= 1
     },
     [types.RESET_ALERTS](state){
         state.alerts = []
