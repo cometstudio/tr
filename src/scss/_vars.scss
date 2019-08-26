@@ -22,3 +22,5 @@ $mobileMaxWidth: 768px;
 
 $brand-primary-color: map_get($palette, 'primary');
 $brand-accent-color: map_get($palette, 'secondary');
+
+$ui-input-border-color--invalid: $brand-accent-color;
