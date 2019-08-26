@@ -14,12 +14,21 @@
                     :help="$t(form.validation.hints.email())">{{ $t('user.email') }}</ui-textbox>
             <ui-textbox
                     floating-label
-                    type="password"
+                    :type="form.password.type"
                     placeholder="Enter a password"
                     v-model="form.data.password"
                     :invalid="form.validation.errors.password.length > 0"
-                    :help="$t(form.validation.hints.password())">{{ $t('user.password') }}</ui-textbox>
+                    :help="$t(form.validation.hints.password())"
+                    icon-position="right">
+                        {{ $t('user.password') }}
+                        <font-awesome-icon icon="eye" slot="icon" v-if="this.form.password.type === 'password' && form.data.password.length" @click="togglePasswordInputType"></font-awesome-icon>
+                        <font-awesome-icon icon="eye-slash" slot="icon" v-else-if="form.data.password.length" @click="togglePasswordInputType"></font-awesome-icon>
+            </ui-textbox>
             <ui-button color="primary">{{ $t('user.signup.button') }}</ui-button>
+
+            <ul>
+                <li><router-link :to="{ name: 'login'}">{{ $t('user.login.title') }}</router-link></li>
+            </ul>
         </form>
     </div>
 </template>
@@ -39,6 +48,9 @@
         data () {
             return {
                 form: {
+                    password: {
+                        type: 'password'
+                    },
                     data: {
                         email: '',
                         password: ''
@@ -66,6 +78,9 @@
             {
                 this.form.validation.errors = errors()
             },
+            togglePasswordInputType(){
+                this.form.password.type = this.form.password.type === 'password' ? 'text': 'password'
+            },
             signup()
             {
                 this.resetErrors()
@@ -86,5 +101,11 @@
 </script>
 
 <style lang="scss" scoped>
-
+    .login{
+        form{
+            .fa-eye, .fa-eye-slash{
+                cursor: pointer;
+            }
+        }
+    }
 </style>
