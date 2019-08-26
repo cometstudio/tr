@@ -44,13 +44,11 @@
 </template>
 
 <script>
-    import UiButton from "keen-ui/src/UiButton"
     import { mapActions } from 'vuex'
     import { RESET_STORE } from "@/store/types"
 
     export default {
         name: "Header",
-        components: {UiButton},
         computed: {
             loading(){
                 return this.$store.getters.loading

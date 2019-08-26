@@ -4,6 +4,16 @@
       "name": "Guest",
       "email": "Email",
       "password": "Password",
+      "validation": {
+        "email": {
+          "required": "Email is required",
+          "email": "Provide a real Email, please",
+          "max": "Email must be 32 symbols maximum"
+        },
+        "password": {
+          "required": "Password is required"
+        }
+      },
       "signup": {
         "title": "Sign up",
         "button": "Sign up",
@@ -24,10 +34,20 @@
       "name": "Гость",
       "email": "E-mail",
       "password": "Пароль",
+      "validation": {
+        "email": {
+          "required": "Укажите e-mail",
+          "email": "Укажите реальный e-mail, пожалуйста",
+          "max": "E-mail должен содержать не более 32 символов"
+        },
+        "password": {
+          "required": "Укажите пароль"
+        }
+      },
       "signup": {
         "title": "Зарегистрироваться",
         "button": "Зарегистрироваться",
-        "failed": "Мы сейчас не можем вас зарегистрировать, попробуйте позже"
+        "failed": "Зарегистрироваться не получилось, попробуйте позже"
       },
       "login": {
         "title": "Войти",

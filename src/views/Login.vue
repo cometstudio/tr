@@ -8,16 +8,22 @@
                     floating-label
                     type="text"
                     placeholder="Enter your Email"
-                    :help="form.validation.hints.email()"
-                    :invalid="form.validation.errors.email.length > 0"
-                    v-model="form.data.email">{{ $t('user.email') }}</ui-textbox>
+                    v-model="form.data.email"
+                    :maxlength="32"
+                    :invalid="form.validation.errors.email.length > 0 || form.data.email.length > 32"
+                    :help="$t(form.validation.hints.email())">{{ $t('user.email') }}</ui-textbox>
             <ui-textbox
                     floating-label
-                    type="password"
+                    :type="form.password.type"
                     placeholder="Enter a password"
-                    :help="form.validation.hints.password()"
+                    v-model="form.data.password"
                     :invalid="form.validation.errors.password.length > 0"
-                    v-model="form.data.password">{{ $t('user.password') }}</ui-textbox>
+                    :help="$t(form.validation.hints.password())"
+                    icon-position="right">
+                        {{ $t('user.password') }}
+                        <font-awesome-icon icon="eye" slot="icon" v-if="this.form.password.type === 'password'" @click="showPassword"></font-awesome-icon>
+                        <font-awesome-icon icon="eye-slash" slot="icon" v-else @click="hidePassword"></font-awesome-icon>
+            </ui-textbox>
             <ui-button color="primary">{{ $t('user.login.button') }}</ui-button>
 
             <ul>
@@ -42,6 +48,9 @@
         data () {
             return {
                 form: {
+                    password: {
+                      type: 'password'
+                    },
                     data: {
                         email: '',
                         password: ''
@@ -50,15 +59,14 @@
                         errors: errors(),
                         hints: {
                             email: ()=>{
-                                return this.form.validation.errors.email.join(', ')
+                                return this._.first(this.form.validation.errors.email)
                             },
                             password: ()=>{
-                                return this.form.validation.errors.password.join(', ')
+                                return this._.first(this.form.validation.errors.password)
                             },
                         },
                     },
                 },
-
             }
         },
         methods: {
@@ -69,6 +77,12 @@
             resetErrors()
             {
                 this.form.validation.errors = errors()
+            },
+            showPassword(){
+                this.form.password.type = 'text'
+            },
+            hidePassword(){
+                this.form.password.type = 'password'
             },
             login()
             {
@@ -90,5 +104,11 @@
 </script>
 
 <style lang="scss" scoped>
-
+    .login{
+        form{
+            .fa-eye, .fa-eye-slash{
+                cursor: pointer;
+            }
+        }
+    }
 </style>

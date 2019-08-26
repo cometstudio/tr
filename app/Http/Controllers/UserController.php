@@ -11,7 +11,7 @@ use App\Models\Alert;
 
 class UserController extends Controller
 {
-    public function signup(Request $Request)
+    public function signup(LoginRequest $Request)
     {
         try{
             $credentials = $Request->only([

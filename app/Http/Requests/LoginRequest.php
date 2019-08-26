@@ -24,7 +24,7 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'email'=>'required|email',
+            'email'=>'required|email|max:32',
             'password'=>'required',
         ];
     }
@@ -35,9 +35,10 @@ class LoginRequest extends FormRequest
     public function messages()
     {
         return [
-            'email.required'=>'email is required',
-            'email.email'=>'provide a real email please',
-            'password.required'=>'password is required',
+            'email.required'=>'user.validation.email.required',
+            'email.email'=>'user.validation.email.email',
+            'email.max'=>'user.validation.email.max',
+            'password.required'=>'user.validation.password.required',
         ];
     }
 }

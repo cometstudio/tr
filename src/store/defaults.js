@@ -20,6 +20,7 @@ export const defaultAlert = () => {
 export const defaultUser = () => {
     return {
         id: null,
-        name: String('guest')
+        name: ''
+
     }
 }
