@@ -9,8 +9,9 @@ import { defaultLocale } from './i18n/index.js'
 const messages = Object.assign(languages)
 const i18nOptions = {
     locale: defaultLocale,
+    messages,
     fallbackLocale: 'en',
-    messages
+    silentFallbackWarn: true
 }
 const i18n = new VueI18n(i18nOptions)
 

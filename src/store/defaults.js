@@ -1,9 +1,9 @@
 export const defaultState = () => {
     return {
-        loading: Number(0),
-        alerts: Array(),
-        locale: String('ru'),
-        api_token: String(),
+        loading: 0,
+        alerts: [],
+        locale: 'en',
+        api_token: '',
         user: defaultUser()
     }
 }
@@ -11,9 +11,9 @@ export const defaultState = () => {
 export const defaultAlert = () => {
     return {
         timeout: null,
-        message: String('Success'),
-        type: String('success'),
-        code: Number(200),
+        message: 'Success',
+        type: 'success',
+        code: 200,
     }
 }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\UnauthorizedException;
 use Auth;
@@ -35,7 +36,7 @@ class UserController extends Controller
             return response()->json($Alert, $Alert->code);
         }
     }
-    public function login(Request $Request)
+    public function login(LoginRequest $Request)
     {
         try{
             $credentials = $Request->only([
