@@ -3,8 +3,7 @@
 <template>
     <header class="header">
         <ui-toolbar
-                brand="Awesome app"
-                remove-brand-divider
+                brand="Application"
                 text-color="white"
                 type="colored"
                 :loading="loading">
@@ -29,14 +28,18 @@
                 </router-link>
             </div>
 
+            <div class="locale_switch" @click="toggleLocale" slot="default">
+                {{ locale }}
+            </div>
+
             <div slot="actions">
-                <nav v-if="user.id === null">
-                    <span>{{ $t('user.name') }}</span>
-                    <router-link :to="{ name: 'login'}">{{ $t('user.login.button') }}</router-link>
-                </nav>
-                <nav v-else>
+                <nav v-if="isLoggedIn">
                     <span>{{ user.name }}</span>
                     <a href="" @click.prevent="logout">{{ $t('user.logout.button') }}</a>
+                </nav>
+                <nav v-else>
+                    <span>{{ $t('user.name') }}</span>
+                    <router-link :to="{ name: 'login'}">{{ $t('user.login.button') }}</router-link>
                 </nav>
             </div>
         </ui-toolbar>
@@ -45,7 +48,7 @@
 
 <script>
     import { mapActions } from 'vuex'
-    import { RESET_STORE } from "@/store/types"
+    import { RESET_STORE, SET_LOCALE } from "@/store/types"
 
     export default {
         name: "Header",
@@ -56,16 +59,26 @@
             isBrowser(){
                 return this.$route.name === 'browser'
             },
+            locale(){
+                return this.$store.getters.locale
+            },
             user(){
                 return this.$store.getters.user
+            },
+            isLoggedIn(){
+                return this.$store.getters.isLoggedIn
             }
         },
         methods: {
             ...mapActions([
-                RESET_STORE
+                RESET_STORE,
+                SET_LOCALE
             ]),
             stepBack(){
                 window.history.length > 1 ? this.$router.back() : this.$router.push('/')
+            },
+            toggleLocale(){
+                this.SET_LOCALE('ru')
             },
             logout(){
                 this.RESET_STORE().then(()=>{
@@ -87,6 +100,9 @@
                 color: white;
                 text-decoration: none;
             }
+        }
+        .locale_switch{
+            cursor: pointer;
         }
     }
 </style>

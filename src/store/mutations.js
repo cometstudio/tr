@@ -1,5 +1,5 @@
 import * as types from "./types"
-import {defaultState, defaultUser} from './defaults'
+import { defaultState, defaultUser } from './defaults'
 
 export default {
     [types.RESET_STORE](state){
@@ -24,7 +24,8 @@ export default {
             state.alerts.splice(index, 1)
         }
     },
-    setLocale: (state, locale) => {
+    [types.SET_LOCALE]: (state, locale) => {
+        console.log(locale)
         state.locale = locale
     },
     setApiToken: (state, api_token) => {

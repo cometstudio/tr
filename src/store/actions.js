@@ -38,17 +38,17 @@ export default {
     [types.DISMISS_ALERT]: ({ commit }, index) => {
         commit(types.DISMISS_ALERT, index)
     },
-    setLocale: (context, locale) => {
+    [types.SET_LOCALE]: ({ commit }, locale) => {
         if(locale === undefined){
             // Get locale being stored
             let storedLocale = window.localStorage.getItem('locale')
             // Set state locale if stored
-            if(storedLocale !== null) context.commit('setLocale', storedLocale)
+            if(storedLocale !== null) commit(types.SET_LOCALE, storedLocale)
         }else{
             // Save locale in the local storage
             window.localStorage.setItem('locale', locale)
             // Set state locale
-            context.commit('setLocale', locale)
+            commit(types.SET_LOCALE, locale)
         }
     },
     setUser: (context, payload) => {
