@@ -21,8 +21,10 @@
                     :help="$t(form.validation.hints.password())"
                     icon-position="right">
                         {{ $t('user.password') }}
-                        <font-awesome-icon icon="eye" slot="icon" v-if="this.form.password.type === 'password'" @click="showPassword"></font-awesome-icon>
-                        <font-awesome-icon icon="eye-slash" slot="icon" v-else @click="hidePassword"></font-awesome-icon>
+                        <div slot="icon" v-if="form.data.password">
+                            <font-awesome-icon icon="eye" v-if="this.form.password.type === 'password'" @click="togglePassword"></font-awesome-icon>
+                            <font-awesome-icon icon="eye-slash" v-else @click="togglePassword"></font-awesome-icon>
+                        </div>
             </ui-textbox>
             <ui-button color="primary">{{ $t('user.login.button') }}</ui-button>
 
@@ -78,11 +80,8 @@
             {
                 this.form.validation.errors = errors()
             },
-            showPassword(){
-                this.form.password.type = 'text'
-            },
-            hidePassword(){
-                this.form.password.type = 'password'
+            togglePassword(){
+                this.form.password.type = this.form.password.type === 'password' ? 'text' : 'password'
             },
             login()
             {

@@ -14,11 +14,18 @@
                     :help="$t(form.validation.hints.email())">{{ $t('user.email') }}</ui-textbox>
             <ui-textbox
                     floating-label
-                    type="password"
+                    :type="form.password.type"
                     placeholder="Enter a password"
                     v-model="form.data.password"
                     :invalid="form.validation.errors.password.length > 0"
-                    :help="$t(form.validation.hints.password())">{{ $t('user.password') }}</ui-textbox>
+                    :help="$t(form.validation.hints.password())"
+                    icon-position="right">
+                    {{ $t('user.password') }}
+                    <div slot="icon" v-if="form.data.password">
+                        <font-awesome-icon icon="eye" v-if="this.form.password.type === 'password'" @click="togglePassword"></font-awesome-icon>
+                        <font-awesome-icon icon="eye-slash" v-else @click="togglePassword"></font-awesome-icon>
+                    </div>
+            </ui-textbox>
             <ui-button color="primary">{{ $t('user.signup.button') }}</ui-button>
         </form>
     </div>
@@ -39,6 +46,9 @@
         data () {
             return {
                 form: {
+                    password: {
+                        type: 'password'
+                    },
                     data: {
                         email: '',
                         password: ''
@@ -66,6 +76,9 @@
             {
                 this.form.validation.errors = errors()
             },
+            togglePassword(){
+                this.form.password.type = this.form.password.type === 'password' ? 'text' : 'password'
+            },
             signup()
             {
                 this.resetErrors()
@@ -86,5 +99,11 @@
 </script>
 
 <style lang="scss" scoped>
-
+    .login{
+        form{
+            .fa-eye, .fa-eye-slash{
+                cursor: pointer;
+            }
+        }
+    }
 </style>
