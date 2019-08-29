@@ -13,3 +13,5 @@ export const DISMISS_ALERT = 'DISMISS_ALERT'
 
 export const SIGNUP = 'SIGNUP'
 export const LOGIN = 'LOGIN'
+export const SET_USER = 'SET_USER'
+export const SET_API_TOKEN = 'SET_API_TOKEN'

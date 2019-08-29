@@ -38,7 +38,7 @@ export default {
     [types.DISMISS_ALERT]: ({ commit }, index) => {
         commit(types.DISMISS_ALERT, index)
     },
-    [types.SET_LOCALE]: ({ commit }, locale) => {
+    [types.SET_LOCALE]: ({commit}, locale) => {
         if(locale === undefined){
             // Get locale being stored
             let storedLocale = window.localStorage.getItem('locale')
@@ -50,12 +50,6 @@ export default {
             // Set state locale
             commit(types.SET_LOCALE, locale)
         }
-    },
-    setUser: (context, payload) => {
-        context.commit('setUser', payload)
-    },
-    setApiToken: (context, payload) => {
-        context.commit('setApiToken', payload)
     },
     [types.SIGNUP]: ({ commit, dispatch }, payload)=>{
         return new Promise((resolve, reject) => {
@@ -78,8 +72,8 @@ export default {
 
             axios.post('/api/user/login', payload)
                 .then((response) => {
-                    commit('setApiToken', response.data.api_token)
-                    commit('setUser', response.data.user)
+                    commit(types.SET_API_TOKEN, response.data.api_token)
+                    commit(types.SET_USER, response.data.user)
                     resolve(response.data.user)
                 }).catch((error) => {
                     reject(error)
@@ -87,5 +81,11 @@ export default {
                     commit(types.STOP_LOADING)
                 })
         })
+    },
+    [types.SET_USER]: (context, payload) => {
+        context.commit(types.SET_USER, payload)
+    },
+    [types.SET_API_TOKEN]: (context, payload) => {
+        context.commit('setApiToken', payload)
     }
 }

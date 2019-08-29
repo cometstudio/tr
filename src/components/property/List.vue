@@ -6,20 +6,21 @@
                 <div v-if="filter.on">
                     <a href="" @click.prevent="resetFilter">Reset filter</a>
                 </div>
-                <div v-for="region in regions" v-bind:key="region.id">
-                    <label><input v-bind:value="region.id" v-model="filter.form.regions" type="checkbox">{{ region.name }}</label>
-                </div>
-                <div v-if="districts.length">
-                    <div v-for="district in districts" v-bind:key="district.id">
-                        <label><input v-bind:value="district.id" v-model="filter.form.districts" type="checkbox">{{ district.name }}</label>
-                    </div>
-                </div>
+                <ui-select
+                        has-search
+                        label="Regions"
+                        multiple
+                        placeholder="Select..."
+                        type="basic"
+                        :options="allRegions"
+                        v-model="regions"
+                ></ui-select>
             </form>
         </div>
         <div class="property-cards">
             <div v-for="property in properties" v-bind:key="property.id" class="property-card">
                 <div class="property-card__images">
-                    <img src="_https://media-cdn.tripadvisor.com/media/vr-splice-j/04/c3/00/df.jpg" />
+                    <img src="https://media-cdn.tripadvisor.com/media/vr-splice-j/04/c3/00/df.jpg" />
                 </div>
                 <div class="property-card__title">
                     {{ property.name }}
@@ -33,13 +34,13 @@
 </template>
 
 <script>
-    import { START_LOADING, STOP_LOADING } from "@/store/types"
+    import { START_LOADING, STOP_LOADING, PUSH_ERROR_ALERT } from "@/store/types"
 
     const filter = () => {
         return {
-            on: false,
+            on: true,
             form: {
-                regions: [],
+                regions: '',
                 districts: [],
             }
         }
@@ -50,18 +51,31 @@
         data(){
             return {
                 filter: filter(),
-                regions: [],
+                regions: '',
                 districts: [],
-                properties: []
+                properties: [],
+                allRegions: [
+                    {
+                        label: 'Antalya',
+                        value: 1
+                    },
+                    {
+                        label: 'Alaniya',
+                        value: 2
+                    }
+                ]
             }
         },
         created(){
             this.resetFilter()
-            this.getRegions()
-            this.$watch('filter.form', this.filterUpdated, {deep: true})
-            //this.getProperties()
+            //this.getRegions()
+            //this.$watch('filter.form', this.filterUpdated, {deep: true})
+            this.getProperties()
         },
         methods: {
+            ...mapActions([
+                PUSH_ERROR_ALERT,
+            ]),
             resetFilter(){
                 this.filter = filter()
             },
@@ -85,7 +99,7 @@
                         this.onRegionChange()
                     // Failed
                     }).catch((err) => {
-
+                        this.PUSH_ERROR_ALERT(err.response)
                     // Always
                     }).then(()=>{
                         this.$store.commit(STOP_LOADING)

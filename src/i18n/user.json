@@ -22,7 +22,8 @@
       "login": {
         "title": "Log in",
         "button": "Log in",
-        "failed": "This user is not yet registered"
+        "failed": "Wrong login or password",
+        "not_found": "This user is not yet registered"
       },
       "logout": {
         "button": "Log out"
@@ -37,7 +38,7 @@
       "validation": {
         "email": {
           "required": "Укажите e-mail",
-          "email": "Укажите реальный e-mail, пожалуйста",
+          "email": "Укажите реальный e-mail",
           "max": "E-mail должен содержать не более 32 символов"
         },
         "password": {
@@ -52,7 +53,8 @@
       "login": {
         "title": "Войти",
         "button": "Войти",
-        "failed": "Указанный пользователь не зарегистрирован"
+        "failed": "Неправильный логин или пароль",
+        "not_found": "Пользователь с таким e-mail не зарегистрирован"
       },
       "logout": {
         "button": "Выйти"

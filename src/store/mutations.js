@@ -25,10 +25,9 @@ export default {
         }
     },
     [types.SET_LOCALE]: (state, locale) => {
-        console.log(locale)
         state.locale = locale
     },
-    setApiToken: (state, api_token) => {
+    [types.SET_API_TOKEN]: (state, api_token) => {
         if(api_token === undefined){
             // Set token being stored
             state.api_token = window.localStorage.getItem('api_token')
@@ -39,7 +38,7 @@ export default {
             state.api_token = api_token
         }
     },
-    setUser: (state, user) => {
+    [types.SET_USER]: (state, user) => {
         if(user === undefined){
             // Get user being stored
             let storedUser = window.localStorage.getItem('user')

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
-use Illuminate\Http\Request;
 use Illuminate\Validation\UnauthorizedException;
 use Auth;
 use Log;
 use App\Models\Alert;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -30,6 +30,7 @@ class UserController extends Controller
                     ])
                 ]);
             }else throw new UnauthorizedException('user.signup.failed', 401);
+
         }catch (\Exception $e){
             $Alert = (new Alert())->error($e);
 
@@ -54,7 +55,11 @@ class UserController extends Controller
                         'name',
                     ])
                 ]);
-            }else throw new UnauthorizedException('user.login.failed', 401);
+            }else if(!User::where('email', $credentials['email'])->first()){
+                throw new UnauthorizedException('user.login.not_found', 404);
+            }else{
+                throw new UnauthorizedException('user.login.failed', 401);
+            }
         }catch (\Exception $e){
             $Alert = (new Alert())->error($e);
 

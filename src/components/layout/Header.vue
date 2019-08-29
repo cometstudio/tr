@@ -29,7 +29,7 @@
             </div>
 
             <div class="locale_switch" @click="toggleLocale" slot="default">
-                {{ locale }}
+                {{ languages[locale] }}
             </div>
 
             <div slot="actions">
@@ -48,10 +48,18 @@
 
 <script>
     import { mapActions } from 'vuex'
-    import { RESET_STORE, SET_LOCALE } from "@/store/types"
+    import { SET_USER, RESET_STORE, SET_LOCALE } from "@/store/types"
 
     export default {
         name: "Header",
+        data(){
+            return {
+                languages: {
+                    ru: 'Русский',
+                    en: 'English'
+                },
+            }
+        },
         computed: {
             loading(){
                 return this.$store.getters.loading
@@ -69,16 +77,28 @@
                 return this.$store.getters.isLoggedIn
             }
         },
+        created(){
+            this.SET_USER()
+            this.setLocale()
+        },
         methods: {
             ...mapActions([
+                SET_USER,
                 RESET_STORE,
                 SET_LOCALE
             ]),
             stepBack(){
                 window.history.length > 1 ? this.$router.back() : this.$router.push('/')
             },
+            setLocale(locale = undefined){
+                this.SET_LOCALE(locale).then(()=>{
+                    this.$root.$i18n.locale = this.$store.getters.locale
+                    this.$moment.locale(this.$store.getters.locale)
+                })
+
+            },
             toggleLocale(){
-                this.SET_LOCALE('ru')
+                this.setLocale(_.first(_.xor(_.keys(this.languages), [this.$store.getters.locale])))
             },
             logout(){
                 this.RESET_STORE().then(()=>{
