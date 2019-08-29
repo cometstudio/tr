@@ -24,6 +24,10 @@ Route::prefix('user')->name('user.')->group(function () {
     Route::post('/signup', 'UserController@signup')->name('signup');
     Route::post('/login', 'UserController@login')->name('login');
 });
+// Areas
+Route::prefix('areas')->name('areas.')->group(function () {
+    Route::get('/', 'AreasController@get')->name('get');
+});
 // Regions
 Route::prefix('regions')->name('regions.')->group(function () {
     Route::get('/', 'RegionsController@get')->name('get');
@@ -34,7 +38,7 @@ Route::prefix('districts')->name('districts.')->group(function () {
 });
 // Properties
 Route::prefix('properties')->name('properties.')->group(function () {
-    Route::get('/', 'PropertiesController@get')->name('get');
+    Route::post('/', 'PropertiesController@get')->name('get');
     // Property types
     Route::prefix('type')->name('type.')->group(function () {
         Route::get('/', 'PropertyTypesController@get')->name('get');

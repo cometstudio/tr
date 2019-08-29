@@ -1,26 +1,9 @@
 <template>
     <div class="property-list">
-        <div class="property-filter">
-            Property filter
-            <form method="get">
-                <div v-if="filter.on">
-                    <a href="" @click.prevent="resetFilter">Reset filter</a>
-                </div>
-                <ui-select
-                        has-search
-                        label="Regions"
-                        multiple
-                        placeholder="Select..."
-                        type="basic"
-                        :options="allRegions"
-                        v-model="regions"
-                ></ui-select>
-            </form>
-        </div>
         <div class="property-cards">
             <div v-for="property in properties" v-bind:key="property.id" class="property-card">
                 <div class="property-card__images">
-                    <img src="https://media-cdn.tripadvisor.com/media/vr-splice-j/04/c3/00/df.jpg" />
+                    <img src="_https://tavridadom.ru/upload/iblock/d95/d95918e963b00c7d291ec437d6730201.jpg" />
                 </div>
                 <div class="property-card__title">
                     {{ property.name }}
@@ -34,95 +17,85 @@
 </template>
 
 <script>
+    import { mapActions } from 'vuex'
     import { START_LOADING, STOP_LOADING, PUSH_ERROR_ALERT } from "@/store/types"
-
-    const filter = () => {
-        return {
-            on: true,
-            form: {
-                regions: '',
-                districts: [],
-            }
-        }
-    }
 
     export default {
         name: "PropertyList",
+        props: [
+            'filter'
+        ],
         data(){
             return {
-                filter: filter(),
-                regions: '',
-                districts: [],
-                properties: [],
-                allRegions: [
-                    {
-                        label: 'Antalya',
-                        value: 1
-                    },
-                    {
-                        label: 'Alaniya',
-                        value: 2
-                    }
-                ]
+                properties: []
             }
         },
         created(){
-            this.resetFilter()
+            //this.resetFilter()
             //this.getRegions()
             //this.$watch('filter.form', this.filterUpdated, {deep: true})
             this.getProperties()
+        },
+        watch: {
+            filter: {
+                handler(v){
+                    console.log('Filter changed')
+                    console.log(v)
+                    this.getProperties()
+                }, deep: true
+            }
         },
         methods: {
             ...mapActions([
                 PUSH_ERROR_ALERT,
             ]),
-            resetFilter(){
-                this.filter = filter()
-            },
-            filterUpdated(newV, oldV) {
-                this.filter.on = true
-
-                //this.getProperties()
-            },
             getRegions()
             {
-                this.$store.commit(START_LOADING)
-
-                this.$axios.get('/api/regions')
-                    // Success
-                    .then((res) => {
-                        // Set data
-                        this.regions = res.data
-                        // Set regions from the URL
-                        this.filter.form.regions = this.$route.query.regions || null
-
-                        this.onRegionChange()
-                    // Failed
-                    }).catch((err) => {
-                        this.PUSH_ERROR_ALERT(err.response)
-                    // Always
-                    }).then(()=>{
-                        this.$store.commit(STOP_LOADING)
-                    })
+                // this.$store.commit(START_LOADING)
+                //
+                // this.$axios.get('/api/regions')
+                //     // Success
+                //     .then((res) => {
+                //         // Set data
+                //         this.regions = res.data
+                //         // Set regions from the URL
+                //         this.filter.form.regions = this.$route.query.regions || null
+                //
+                //         this.onRegionChange()
+                //     // Failed
+                //     }).catch((err) => {
+                //         this.PUSH_ERROR_ALERT(err.response)
+                //     // Always
+                //     }).then(()=>{
+                //         this.$store.commit(STOP_LOADING)
+                //     })
             },
-            onRegionChange(){
-                //console.log(this.filter.form)
-                // Set data
-                if(this.filter.form.regions !== null && this.filter.form.regions.length){
-                    this.filter.form.regions.every((v)=>{
-                        //console.log(v)
-                        //this.districts.push(this.regions[this.filter.form.region].districts)
-                    })
-
-                }
-                // Set districts from the URL
-                this.filter.form.districts = this.$route.query.districts || null
+            getDistricts()
+            {
+                // this.$store.commit(START_LOADING)
+                //
+                // this.$axios.get('/api/regions')
+                //     // Success
+                //     .then((res) => {
+                //         // Set data
+                //         this.regions = res.data
+                //         // Set regions from the URL
+                //         this.filter.form.regions = this.$route.query.regions || null
+                //
+                //         this.onRegionChange()
+                //     // Failed
+                //     }).catch((err) => {
+                //         this.PUSH_ERROR_ALERT(err.response)
+                //     // Always
+                //     }).then(()=>{
+                //         this.$store.commit(STOP_LOADING)
+                //     })
             },
             getProperties()
             {
                 this.$store.commit(START_LOADING)
 
-                this.$axios.get('/api/properties', {params: this.filter.form })
+                this.$axios.post('/api/properties', this.filter.form)
                     // Success
                     .then((res) => {
                         this.properties = res.data
@@ -140,15 +113,24 @@
 
 <style lang="scss" scoped>
     .property{
-        &-list{
+        &-list {
             display: grid;
             grid-template-columns: 4fr;
             grid-template-rows: auto;
             grid-gap: 2rem;
         }
-        &-filter{
+        &__filter{
             grid-row: 1;
             margin-bottom: 2rem;
+            form{
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: flex-end;
+                > div{
+                    flex-basis: 20%;
+                }
+            }
         }
         &-cards{
             grid-row: 2;
