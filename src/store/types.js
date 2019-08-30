@@ -11,7 +11,9 @@ export const PUSH_ERROR_ALERT = 'PUSH_ERROR_ALERT'
 export const PUSH_WARNING_ALERT = 'PUSH_WARNING_ALERT'
 export const DISMISS_ALERT = 'DISMISS_ALERT'
 
-export const SIGNUP = 'SIGNUP'
-export const LOGIN = 'LOGIN'
-export const SET_USER = 'SET_USER'
+export const USER_SIGNUP = 'USER_SIGNUP'
+export const USER_LOGIN = 'USER_LOGIN'
+export const USER_SAVE = 'USER_SAVE'
+export const USER_SET = 'USER_SET'
+
 export const SET_API_TOKEN = 'SET_API_TOKEN'

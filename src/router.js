@@ -4,38 +4,22 @@ import Properties from './views/Properties'
 
 Vue.use(Router)
 
+const routes = [
+    { path: '/', name: 'index', meta: { layout: 'properties' }, component: Properties },
+    { path: '/browser', name: 'browser', component: () => import('./views/Browser.vue') },
+    { path: '/about', name: 'about', component: () => import('./views/About.vue') },
+    { path: '/user', name: 'user', component: () => import('./views/EmptyForNested'),
+        children: [
+            { path: 'login', name: 'user.login', component: () => import('./views/user/Login') },
+            { path: 'signup', name: 'user.signup', component: () => import('./views/user/Signup') },
+            { path: 'profile', name: 'user.profile', component: () => import('./views/user/Profile') },
+        ]
+    },
+
+]
+
 export default new Router({
     mode: 'history',
     base: process.env.BASE_URL,
-    routes: [
-        {
-            path: '/',
-            name: 'properties',
-            meta: { layout: 'properties' },
-            component: Properties
-        },
-        {
-            path: '/browser',
-            name: 'browser',
-            component: () => import('./views/Browser.vue')
-        },
-        {
-            path: '/about',
-            name: 'about',
-            // route level code-splitting
-            // this generates a separate chunk (about.[hash].js) for this route
-            // which is lazy-loaded when the route is visited.
-            component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
-        },
-        {
-            path: '/login',
-            name: 'login',
-            component: () => import('./views/Login')
-        },
-        {
-            path: '/signup',
-            name: 'signup',
-            component: () => import('./views/Signup')
-        },
-    ]
+    routes: routes
 })

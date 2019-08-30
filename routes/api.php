@@ -19,7 +19,8 @@ use Illuminate\Http\Request;
 
 // All ids must follow this pattern
 Route::pattern('id', '[0-9]+');
-// Authenticate
+
+// User
 Route::prefix('user')->name('user.')->group(function () {
     Route::post('/signup', 'UserController@signup')->name('signup');
     Route::post('/login', 'UserController@login')->name('login');
@@ -46,4 +47,9 @@ Route::prefix('properties')->name('properties.')->group(function () {
 });
 
 // Auth is required
-//Route::middleware('auth:api')->group(function(){});
+Route::middleware('auth:api')->group(function(){
+// User
+    Route::prefix('user')->name('user.')->group(function () {
+        Route::post('/', 'UserController@save')->name('save');
+    });
+});

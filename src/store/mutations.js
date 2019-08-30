@@ -38,7 +38,7 @@ export default {
             state.api_token = api_token
         }
     },
-    [types.SET_USER]: (state, user) => {
+    [types.USER_SET]: (state, user) => {
         if(user === undefined){
             // Get user being stored
             let storedUser = window.localStorage.getItem('user')

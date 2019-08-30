@@ -19,6 +19,11 @@ class Alert extends Model
         'code'
     ];
 
+    public function code()
+    {
+        return $this->code >= 100 && $this->code < 600 ? $this->code : 500;
+    }
+
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);

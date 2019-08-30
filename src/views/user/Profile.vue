@@ -1,9 +1,17 @@
-<i18n src="../i18n/user.json"></i18n>
+<i18n src="../../i18n/user.json"></i18n>
 
 <template>
-    <div class="login">
-        <h3>{{ $t('user.login.title') }}</h3>
-        <form class="form" @submit.prevent="login">
+    <div class="user__profile">
+        <h3>{{ $t('user.profile.title') }}</h3>
+        <form class="form" @submit.prevent="save">
+            <ui-textbox
+                    floating-label
+                    type="text"
+                    placeholder="Enter your name"
+                    v-model="form.data.name"
+                    :maxlength="32"
+                    :invalid="form.validation.errors.name.length > 0 || form.data.name.length > 32"
+                    :help="$t(form.validation.hints.name())">{{ $t('user.name') }}</ui-textbox>
             <ui-textbox
                     floating-label
                     type="text"
@@ -20,27 +28,24 @@
                     :invalid="form.validation.errors.password.length > 0"
                     :help="$t(form.validation.hints.password())"
                     icon-position="right">
-                        {{ $t('user.password') }}
-                        <div slot="icon" v-if="form.data.password">
-                            <font-awesome-icon icon="eye" v-if="this.form.password.type === 'password'" @click="togglePassword"></font-awesome-icon>
-                            <font-awesome-icon icon="eye-slash" v-else @click="togglePassword"></font-awesome-icon>
-                        </div>
+                {{ $t('user.password') }}
+                <div slot="icon" v-if="form.data.password">
+                    <font-awesome-icon icon="eye" v-if="this.form.password.type === 'password'" @click="togglePassword"></font-awesome-icon>
+                    <font-awesome-icon icon="eye-slash" v-else @click="togglePassword"></font-awesome-icon>
+                </div>
             </ui-textbox>
-            <ui-button color="primary">{{ $t('user.login.button') }}</ui-button>
-
-            <ul>
-                <li><router-link :to="{ name: 'signup'}">{{ $t('user.signup.title') }}</router-link></li>
-            </ul>
+            <ui-button color="primary">{{ $t('button.save') }}</ui-button>
         </form>
     </div>
 </template>
 
 <script>
     import { mapActions } from 'vuex'
-    import { LOGIN, PUSH_ERROR_ALERT } from "../store/types"
+    import { USER_SET, USER_SAVE, PUSH_ALERT, PUSH_ERROR_ALERT } from "@/store/types"
 
     const errors = ()=>{
         return {
+            name: [],
             email: [],
             password: []
         }
@@ -51,15 +56,19 @@
             return {
                 form: {
                     password: {
-                      type: 'password'
+                        type: 'password'
                     },
                     data: {
+                        name: '',
                         email: '',
                         password: ''
                     },
                     validation: {
                         errors: errors(),
                         hints: {
+                            name: ()=>{
+                                return this._.first(this.form.validation.errors.name)
+                            },
                             email: ()=>{
                                 return this._.first(this.form.validation.errors.email)
                             },
@@ -71,9 +80,21 @@
                 },
             }
         },
+        created(){
+            this.USER_SET().then(()=>{
+                this.form.data = this._.merge(this.form.data, this.user)
+            })
+        },
+        computed: {
+            user(){
+                return this.$store.getters.user
+            },
+        },
         methods: {
             ...mapActions([
-                LOGIN,
+                USER_SET,
+                USER_SAVE,
+                PUSH_ALERT,
                 PUSH_ERROR_ALERT,
             ]),
             resetErrors()
@@ -83,18 +104,20 @@
             togglePassword(){
                 this.form.password.type = this.form.password.type === 'password' ? 'text' : 'password'
             },
-            login()
+            save()
             {
                 this.resetErrors()
 
-                this.LOGIN(this.form.data)
-                    .then(()=>{
-                        this.$router.push({name: 'properties'})
+                this.USER_SAVE(this.form.data)
+                    .then((response)=>{
+                        this.PUSH_ALERT({
+                            message: this.$t(response.message)
+                        })
                     }).catch((error)=>{
-                        Object.assign(this.form.validation.errors, error.response.data.errors)
+                        if(error.response !== undefined) Object.assign(this.form.validation.errors, error.response.data.errors)
 
                         this.PUSH_ERROR_ALERT({
-                            message: this.$t(error.response.data.message)
+                            message: error.response !== undefined ? this.$t(error.response.data.message) : error
                         })
                     })
             }
@@ -102,12 +125,6 @@
     }
 </script>
 
-<style lang="scss" scoped>
-    .login{
-        form{
-            .fa-eye, .fa-eye-slash{
-                cursor: pointer;
-            }
-        }
-    }
+<style scoped>
+
 </style>

@@ -51,13 +51,13 @@ export default {
             commit(types.SET_LOCALE, locale)
         }
     },
-    [types.SIGNUP]: ({ commit, dispatch }, payload)=>{
+    [types.USER_SIGNUP]: ({ commit, dispatch }, payload)=>{
         return new Promise((resolve, reject) => {
             commit(types.START_LOADING)
 
             axios.post('/api/user/signup', payload)
                 .then((response) => {
-                    dispatch(types.LOGIN, payload)
+                    dispatch(types.USER_LOGIN, payload)
                     resolve(response)
                 }).catch((error) => {
                     reject(error)
@@ -66,14 +66,14 @@ export default {
                 })
         })
     },
-    [types.LOGIN]: ({ commit, dispatch }, payload)=>{
+    [types.USER_LOGIN]: ({ commit, dispatch }, payload)=>{
         return new Promise((resolve, reject) => {
             commit(types.START_LOADING)
 
             axios.post('/api/user/login', payload)
                 .then((response) => {
                     commit(types.SET_API_TOKEN, response.data.api_token)
-                    commit(types.SET_USER, response.data.user)
+                    commit(types.USER_SET, response.data.user)
                     resolve(response.data.user)
                 }).catch((error) => {
                     reject(error)
@@ -82,8 +82,23 @@ export default {
                 })
         })
     },
-    [types.SET_USER]: (context, payload) => {
-        context.commit(types.SET_USER, payload)
+    [types.USER_SAVE]: ({ commit, dispatch }, payload)=>{
+        return new Promise((resolve, reject) => {
+            commit(types.START_LOADING)
+
+            axios.post('/api/user', payload)
+                .then((response) => {
+                    commit(types.USER_SET, response.data.user)
+                    resolve(response.data)
+                }).catch((error) => {
+                    reject(error)
+                }).then(()=>{
+                    commit(types.STOP_LOADING)
+                })
+        })
+    },
+    [types.USER_SET]: (context, payload) => {
+        context.commit(types.USER_SET, payload)
     },
     [types.SET_API_TOKEN]: (context, payload) => {
         context.commit('setApiToken', payload)

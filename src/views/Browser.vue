@@ -4,7 +4,7 @@
             <li>
                 <h3>Section One</h3>
                 <ul>
-                    <li><router-link :to="{name: 'properties'}">properties</router-link></li>
+                    <li><router-link :to="{name: 'index'}">properties</router-link></li>
                 </ul>
             </li>
             <li>
