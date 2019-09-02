@@ -15,18 +15,27 @@ class Area
         /**
          * @var $Regions Collection
          */
-        $Builder = Region::with('districts');
+        $Builder = Region::select([
+            'uuid',
+            'name',
+        ]);
         if(!empty($filter['q'])) $Builder->where('name', 'LIKE', '%' . $filter['q'] . '%');
         $Regions = $Builder->get();
 
-        /**
-         * @var $Districts Collection
-         */
-        $Builder = District::with('region');
-        if(!empty($filter['q'])) $Builder->where('name', 'LIKE', '%' . $filter['q'] . '%');
-        $Districts = $Builder->get();
+        if(!empty($filter['q'])){
+            /**
+             * @var $Districts Collection
+             */
+            $Builder = District::select([
+                'uuid',
+                'region_id',
+                'name',
+            ]);
+            if(!empty($filter['q'])) $Builder->where('name', 'LIKE', '%' . $filter['q'] . '%');
+            $Districts = $Builder->get();
+        }
 
-        $Areas = $Regions->concat($Districts);
+        $Areas = !empty($Districts) ? $Regions->concat($Districts) : $Regions;
 
         return $Areas;
     }

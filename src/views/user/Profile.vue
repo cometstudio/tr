@@ -116,9 +116,7 @@
                     }).catch((error)=>{
                         if(error.response !== undefined) Object.assign(this.form.validation.errors, error.response.data.errors)
 
-                        this.PUSH_ERROR_ALERT({
-                            message: error.response !== undefined ? this.$t(error.response.data.message) : error
-                        })
+                        this.PUSH_ERROR_ALERT(error)
                     })
             }
         }

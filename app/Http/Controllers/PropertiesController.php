@@ -5,26 +5,44 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Property;
 use DB;
+use Arr;
+use App\Models\Alert;
 
 class PropertiesController extends Controller
 {
     public function get(Request $Request)
     {
-        $Builder = Property::with('type')
-            ->join('districts', 'properties.district_id', 'districts.id')
-            ->with('district', 'author');
+        try{
 
-        // Apply filters
-        if($Request->get('region')) $Builder->where('districts.region_id', $Request->get('region'));
-        if($Request->get('district')) $Builder->where('districts.id', $Request->get('district'));
+            $Builder = Property::with('type')
+                ->join('districts', 'properties.district_id', 'districts.id')
+                ->join('regions', 'regions.id', 'districts.region_id')
+                ->with('district', 'author');
 
-        $Properties = $Builder
-            ->select([
-                DB::raw('properties.*')
-            ])
-            ->get()
-            ->keyBy('id');
+            // Apply filters
+            // Areas
+            $areas = $Request->input('data.areas');
+            if(!empty($areas)){
+                $areaUUIDs = Arr::pluck($areas, 'uuid');
 
-        return response()->json($Properties);
+                $Builder->where(function($q) use ($areaUUIDs){
+                    $q->whereIn('districts.uuid', $areaUUIDs);
+                    $q->orWhereIn('regions.uuid', $areaUUIDs);
+                });
+            }
+
+            $Properties = $Builder
+                ->select([
+                    DB::raw('properties.*')
+                ])
+                ->get()
+                ->keyBy('id');
+
+            return response()->json($Properties);
+        }catch (\Exception $e){
+            $Alert = (new Alert())->error($e);
+
+            return response()->json($Alert, $Alert->code());
+        }
     }
 }

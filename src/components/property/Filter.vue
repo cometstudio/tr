@@ -6,6 +6,7 @@
                         has-search
                         disableFilter
                         multiple
+                        :keys="areaKeys"
                         placeholder="Select places..."
                         search-placeholder="Find..."
                         type="basic"
@@ -16,7 +17,8 @@
                         v-model="form.areas">
 
                         <template slot-scope="props" slot="option">
-                            <font-awesome-icon icon="map-marker-alt"></font-awesome-icon> {{ props.option.name }}
+                            <font-awesome-icon v-if="props.option.region_id" icon="map-marker-alt"></font-awesome-icon>
+                            {{ props.option.name }}
                         </template>
                 </ui-select>
             </div>
@@ -34,7 +36,12 @@
             return {
                 loading: false,
                 areas: [],
+                areaKeys: {
+                    value: 'uuid',
+                    label: 'name',
+                },
                 form: {
+                    areaFilterQuery: '',
                     areas: []
                 }
             }
@@ -47,6 +54,9 @@
                 PUSH_ERROR_ALERT,
             ]),
             getAreas(q){
+                //console.log(this.form.areaFilterQuery)
+                //if(this.form.areaFilterQuery.length && q.length) console.log('Reset areas')
+
                 this.loading = true
 
                 this.$axios.get('/api/areas', {
@@ -62,6 +72,7 @@
                         this.PUSH_ERROR_ALERT(err.response)
                     // Always
                     }).then(()=>{
+                        this.form.areaFilterQuery = q
                         this.loading = false
                     })
             },
@@ -72,6 +83,12 @@
     }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+    .ui-select{
+        &__options{
+            svg{
+                margin-right: 0.3rem;
+            }
+        }
+    }
 </style>

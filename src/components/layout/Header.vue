@@ -38,7 +38,7 @@
                     <a href="" @click.prevent="logout">{{ $t('user.logout.button') }}</a>
                 </nav>
                 <nav v-else>
-                    <span>{{ $t('user.name') }}</span>
+                    <span>{{ $t('user.guest') }}</span>
                     <router-link :to="{ name: 'user.login'}">{{ $t('user.login.button') }}</router-link>
                 </nav>
             </div>

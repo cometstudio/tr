@@ -16,7 +16,9 @@ class AreasController extends Controller
      */
     public function get(Request $Request)
     {
-        $Areas = (new Area())->get($Request->all());
+        $filter = $Request->all();
+
+        $Areas = (new Area())->get($filter);
 
         return response()->json($Areas);
     }

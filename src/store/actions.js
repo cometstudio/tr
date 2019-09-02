@@ -1,6 +1,7 @@
 import * as types from "./types"
 import { defaultAlert } from './defaults'
 import axios from 'axios'
+import i18n from '@/i18n'
 
 export default {
     [types.RESET_STORE]: ({commit}) => {
@@ -14,7 +15,7 @@ export default {
         commit(types.RESET_ALERTS, payload)
     },
     [types.PUSH_ALERT]: ({ commit }, payload) => {
-        const alert = Object.assign(defaultAlert(), payload)
+        let alert = Object.assign(defaultAlert(), payload)
 
         return new Promise((resolve) => {
             commit(types.PUSH_ALERT, alert)
@@ -25,20 +26,25 @@ export default {
             }, 3000)
         })
     },
+    [types.PUSH_SUCCESS_ALERT]: ({ dispatch }, payload) => {
+        let message = payload.response !== undefined ? i18n.t(payload.response.data.message) : payload
+        let alert = Object.assign({ message: message })
+        dispatch(types.PUSH_ALERT, alert)
+    },
     [types.PUSH_ERROR_ALERT]: ({ dispatch }, payload) => {
-        const alert = Object.assign(defaultAlert(), {type: 'error'}, payload)
-
+        let message = payload.response !== undefined ? i18n.t(payload.response.data.message) : payload
+        let alert = Object.assign({ message: message, type: 'error' })
         dispatch(types.PUSH_ALERT, alert)
     },
     [types.PUSH_WARNING_ALERT]: ({ dispatch }, payload) => {
-        const alert = Object.assign(defaultAlert(), {type: 'warning'}, payload)
-
+        let message = payload.response !== undefined ? i18n.t(payload.response.data.message) : payload
+        let alert = Object.assign({ message: message, type: 'warning' })
         dispatch(types.PUSH_ALERT, alert)
     },
     [types.DISMISS_ALERT]: ({ commit }, index) => {
         commit(types.DISMISS_ALERT, index)
     },
-    [types.SET_LOCALE]: ({commit}, locale) => {
+    [types.SET_LOCALE]: ({ commit }, locale) => {
         if(locale === undefined){
             // Get locale being stored
             let storedLocale = window.localStorage.getItem('locale')
