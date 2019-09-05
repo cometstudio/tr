@@ -102,7 +102,7 @@
             },
             logout(){
                 this.RESET_STORE().then(()=>{
-                    this.$router.push({ name: 'user.login' })
+                    this.$router.push({ name: 'index' })
                 }).catch((error)=>{})
             }
         }

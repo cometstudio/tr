@@ -20,6 +20,8 @@ class UserController extends Controller
                 'password',
             ]);
 
+
+
             if(Auth::attempt($credentials + ['disabled' => 0])) {
                 $User = Auth::user();
 
@@ -44,7 +46,7 @@ class UserController extends Controller
                 'password',
             ]);
 
-            if(Auth::attempt($credentials + ['disabled' => 0])) {
+            if(Auth::attempt($credentials + ['disabled' => 0], true)) {
                 $User = Auth::user();
 
                 return response()->json([
@@ -74,6 +76,21 @@ class UserController extends Controller
 
             return response()->json([
                 'user'=>$User->publicProperties(),
+                'message'=>'success',
+            ]);
+        }catch (\Exception $e){
+            $Alert = (new Alert())->error($e);
+
+            return response()->json($Alert, $Alert->code());
+        }
+    }
+
+    public function logout()
+    {
+        try{
+            Auth::logout();
+
+            return response()->json([
                 'message'=>'success',
             ]);
         }catch (\Exception $e){

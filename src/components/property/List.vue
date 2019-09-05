@@ -3,7 +3,7 @@
         <div class="property-cards">
             <div v-for="property in properties" v-bind:key="property.id" class="property-card">
                 <div class="property-card__images">
-                    <img src="https://tavridadom.ru/upload/iblock/d95/d95918e963b00c7d291ec437d6730201.jpg" />
+                    <img src="_https://tavridadom.ru/upload/iblock/d95/d95918e963b00c7d291ec437d6730201.jpg" />
                 </div>
                 <div class="property-card__title">
                     {{ property.name }}

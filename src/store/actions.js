@@ -5,10 +5,19 @@ import i18n from '@/i18n'
 
 export default {
     [types.RESET_STORE]: ({commit}) => {
-        return new Promise((resolve) => {
-            window.localStorage.clear()
-            commit(types.RESET_STORE)
-            resolve()
+        return new Promise((resolve, reject) => {
+            commit(types.START_LOADING)
+
+            axios.post('/api/user/logout')
+                .then(() => {
+                    window.localStorage.clear()
+                    commit(types.RESET_STORE)
+                    resolve()
+                }).catch((error) => {
+                    reject(error)
+            }).then(()=>{
+                commit(types.STOP_LOADING)
+            })
         })
     },
     [types.RESET_ALERTS]: ({ commit }, payload) => {
@@ -31,13 +40,12 @@ export default {
         let alert = Object.assign({ message: message })
         dispatch(types.PUSH_ALERT, alert)
     },
-    [types.PUSH_ERROR_ALERT]: ({ dispatch }, payload) => {
-        let message = payload.response !== undefined ? i18n.t(payload.response.data.message) : payload
+    [types.PUSH_ERROR_ALERT]: ({ dispatch }, message) => {
+        //let message = payload.response !== undefined ? i18n.t(payload.response.data.message) : payload
         let alert = Object.assign({ message: message, type: 'error' })
         dispatch(types.PUSH_ALERT, alert)
     },
-    [types.PUSH_WARNING_ALERT]: ({ dispatch }, payload) => {
-        let message = payload.response !== undefined ? i18n.t(payload.response.data.message) : payload
+    [types.PUSH_WARNING_ALERT]: ({ dispatch }, message) => {
         let alert = Object.assign({ message: message, type: 'warning' })
         dispatch(types.PUSH_ALERT, alert)
     },

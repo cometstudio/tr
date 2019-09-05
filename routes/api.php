@@ -24,6 +24,7 @@ Route::pattern('id', '[0-9]+');
 Route::prefix('user')->name('user.')->group(function () {
     Route::post('/signup', 'UserController@signup')->name('signup');
     Route::post('/login', 'UserController@login')->name('login');
+    Route::post('/logout', 'UserController@logout')->name('logout');
 });
 // Areas
 Route::prefix('areas')->name('areas.')->group(function () {
