@@ -101,7 +101,11 @@
                         this.properties = res.data
                     // Failed
                     }).catch((error) => {
-                        this.PUSH_ERROR_ALERT(error)
+                        if(error.response !== undefined) Object.assign(this.form.validation.errors, error.response.data.errors)
+
+                        let message = error.response !== undefined ? this.$t(error.response.data.message) : error
+
+                        this.PUSH_ERROR_ALERT(message)
                     // Always
                     }).then(()=>{
                         this.$store.commit(STOP_LOADING)

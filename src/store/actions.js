@@ -36,12 +36,10 @@ export default {
         })
     },
     [types.PUSH_SUCCESS_ALERT]: ({ dispatch }, payload) => {
-        let message = payload.response !== undefined ? i18n.t(payload.response.data.message) : payload
         let alert = Object.assign({ message: message })
         dispatch(types.PUSH_ALERT, alert)
     },
     [types.PUSH_ERROR_ALERT]: ({ dispatch }, message) => {
-        //let message = payload.response !== undefined ? i18n.t(payload.response.data.message) : payload
         let alert = Object.assign({ message: message, type: 'error' })
         dispatch(types.PUSH_ALERT, alert)
     },
