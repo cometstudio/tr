@@ -1,5 +1,5 @@
 import * as types from "./types"
-import {defaultState, defaultUser} from './defaults'
+import { defaultState, defaultUser } from './defaults'
 
 export default {
     [types.RESET_STORE](state){
@@ -24,10 +24,10 @@ export default {
             state.alerts.splice(index, 1)
         }
     },
-    setLocale: (state, locale) => {
+    [types.SET_LOCALE]: (state, locale) => {
         state.locale = locale
     },
-    setApiToken: (state, api_token) => {
+    [types.SET_API_TOKEN]: (state, api_token) => {
         if(api_token === undefined){
             // Set token being stored
             state.api_token = window.localStorage.getItem('api_token')
@@ -38,7 +38,7 @@ export default {
             state.api_token = api_token
         }
     },
-    setUser: (state, user) => {
+    [types.USER_SET]: (state, user) => {
         if(user === undefined){
             // Get user being stored
             let storedUser = window.localStorage.getItem('user')

@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\LoginRequest;
-use Illuminate\Http\Request;
+use App\Http\Requests\UserLoginRequest;
+use App\Http\Requests\UserProfileRequest;
 use Illuminate\Validation\UnauthorizedException;
 use Auth;
 use Log;
 use App\Models\Alert;
+use App\Models\User;
 
 class UserController extends Controller
 {
-    public function signup(LoginRequest $Request)
+    public function signup(UserLoginRequest $Request)
     {
         try{
             $credentials = $Request->only([
@@ -24,19 +25,18 @@ class UserController extends Controller
 
                 return response()->json([
                     'api_token'=>$User->api_token,
-                    'user'=>$User->only([
-                        'id',
-                        'name',
-                    ])
+                    'user'=>$User->publicProperties()
                 ]);
             }else throw new UnauthorizedException('user.signup.failed', 401);
+
         }catch (\Exception $e){
             $Alert = (new Alert())->error($e);
 
-            return response()->json($Alert, $Alert->code);
+            return response()->json($Alert, $Alert->code());
         }
     }
-    public function login(LoginRequest $Request)
+
+    public function login(UserLoginRequest $Request)
     {
         try{
             $credentials = $Request->only([
@@ -44,21 +44,57 @@ class UserController extends Controller
                 'password',
             ]);
 
-            if(Auth::attempt($credentials + ['disabled' => 0])) {
+            if(Auth::attempt($credentials + ['disabled' => 0], true)) {
                 $User = Auth::user();
 
                 return response()->json([
                     'api_token'=>$User->api_token,
-                    'user'=>$User->only([
-                        'id',
-                        'name',
-                    ])
+                    'user'=>$User->publicProperties()
                 ]);
-            }else throw new UnauthorizedException('user.login.failed', 401);
+            }else if(!User::where('email', $credentials['email'])->first()){
+                throw new UnauthorizedException('user.login.not_found', 404);
+            }else{
+                throw new UnauthorizedException('user.login.failed', 401);
+            }
         }catch (\Exception $e){
             $Alert = (new Alert())->error($e);
 
-            return response()->json($Alert, $Alert->code);
+            return response()->json($Alert, $Alert->code());
+        }
+    }
+
+    public function save(UserProfileRequest $Request)
+    {
+        try{
+            $data = $Request->all();
+
+            $User = Auth::user();
+
+            if(!$User->update($data)) throw new \Exception('error.update');
+
+            return response()->json([
+                'user'=>$User->publicProperties(),
+                'message'=>'success',
+            ]);
+        }catch (\Exception $e){
+            $Alert = (new Alert())->error($e);
+
+            return response()->json($Alert, $Alert->code());
+        }
+    }
+
+    public function logout()
+    {
+        try{
+            Auth::logout();
+
+            return response()->json([
+                'message'=>'success',
+            ]);
+        }catch (\Exception $e){
+            $Alert = (new Alert())->error($e);
+
+            return response()->json($Alert, $Alert->code());
         }
     }
 }

@@ -1,5 +1,5 @@
 <template>
-    <div class="layout layout--default">
+    <div class="layout layout--messages">
         <Header></Header>
         <Alerts></Alerts>
         <main>
@@ -27,8 +27,8 @@
     }
 </script>
 
-<style lang="scss" scoped>
+<style type="scss" scoped>
     main{
-        padding: $globalPadding;
+
     }
 </style>

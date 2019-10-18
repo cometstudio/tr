@@ -2,9 +2,15 @@
     <div class="browser">
         <ul>
             <li>
+                <ul>
+                    <li><router-link :to="{name: 'index'}">Index</router-link></li>
+                </ul>
+            </li>
+            <li>
                 <h3>Section One</h3>
                 <ul>
-                    <li><router-link :to="{name: 'properties'}">properties</router-link></li>
+                    <li><router-link :to="{ name: 'sdc.logins' }">Logins</router-link></li>
+                    <li><router-link :to="{name: 'messenger'}">Messages</router-link></li>
                 </ul>
             </li>
             <li>
@@ -25,6 +31,8 @@
 
 <style lang="scss" scoped>
     .browser{
+        padding: $globalPadding;
+
         ul{
             > li{
                 margin-top: 2rem;
@@ -35,7 +43,8 @@
             ul{
                 padding-left: 1rem;
                 li{
-                    padding: 0.5rem 0;
+                    padding: 0.25em 0;
+                    margin: 0;
                 }
             }
         }

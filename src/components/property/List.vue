@@ -1,30 +1,15 @@
 <template>
     <div class="property-list">
-        <div class="property-filter">
-            <form method="get">
-                <div v-if="filter.on">
-                    <a href="" @click.prevent="resetFilter">Reset filter</a>
-                </div>
-                <div v-for="region in regions" v-bind:key="region.id">
-                    <label><input v-bind:value="region.id" v-model="filter.form.regions" type="checkbox">{{ region.name }}</label>
-                </div>
-                <div v-if="districts.length">
-                    <div v-for="district in districts" v-bind:key="district.id">
-                        <label><input v-bind:value="district.id" v-model="filter.form.districts" type="checkbox">{{ district.name }}</label>
-                    </div>
-                </div>
-            </form>
-        </div>
         <div class="property-cards">
             <div v-for="property in properties" v-bind:key="property.id" class="property-card">
                 <div class="property-card__images">
-                    <img src="https://media-cdn.tripadvisor.com/media/vr-splice-j/04/c3/00/df.jpg" />
+                    <img src="_https://tavridadom.ru/upload/iblock/d95/d95918e963b00c7d291ec437d6730201.jpg" />
                 </div>
                 <div class="property-card__title">
                     {{ property.name }}
                 </div>
                 <div v-if="property.price" class="property-card__price">
-                    {{ property.price }}
+
                 </div>
             </div>
         </div>
@@ -33,24 +18,15 @@
 
 <script>
     import { mapActions } from 'vuex'
-
-    const filter = () => {
-        return {
-            on: false,
-            form: {
-                regions: [],
-                districts: [],
-            }
-        }
-    }
+    import { START_LOADING, STOP_LOADING, PUSH_ERROR_ALERT } from "@/store/types"
 
     export default {
         name: "PropertyList",
+        props: [
+            'filter'
+        ],
         data(){
             return {
-                filter: filter(),
-                regions: [],
-                districts: [],
                 properties: []
             }
         },
@@ -58,71 +34,81 @@
             //this.resetFilter()
             //this.getRegions()
             //this.$watch('filter.form', this.filterUpdated, {deep: true})
+            this.getProperties()
+        },
+        watch: {
+            filter: {
+                handler(v){
+                    console.log('Filter changed')
+                    console.log(v)
+                    this.getProperties()
+                }, deep: true
+            }
         },
         methods: {
             ...mapActions([
-               'loading'
+                PUSH_ERROR_ALERT,
             ]),
-            resetFilter(){
-                this.filter = filter()
-            },
-            filterUpdated(newV, oldV) {
-                this.filter.on = true
-
-                //this.getProperties()
-            },
             getRegions()
             {
-                // Show the progress bar
-                this.loading()
-
-                this.$axios.get('/api/regions')
-                // Success
-                    .then((res) => {
-                        // Set data
-                        this.regions = res.data
-                        // Set regions from the URL
-                        this.filter.form.regions = this.$route.query.regions || null
-
-                        this.onRegionChange()
-                        // Failed
-                    }).catch((err) => {
-                        //console.log(err)
-                    }).then(()=>{
-                        this.loading(false)
-                    })
+                // this.$store.commit(START_LOADING)
+                //
+                // this.$axios.get('/api/regions')
+                //     // Success
+                //     .then((res) => {
+                //         // Set data
+                //         this.regions = res.data
+                //         // Set regions from the URL
+                //         this.filter.form.regions = this.$route.query.regions || null
+                //
+                //         this.onRegionChange()
+                //     // Failed
+                //     }).catch((err) => {
+                //         this.PUSH_ERROR_ALERT(err.response)
+                //     // Always
+                //     }).then(()=>{
+                //         this.$store.commit(STOP_LOADING)
+                //     })
             },
-            onRegionChange(){
-                //console.log(this.filter.form)
-                // Set data
-                if(this.filter.form.regions !== null && this.filter.form.regions.length){
-                    this.filter.form.regions.every((v)=>{
-                        //console.log(v)
-                        //this.districts.push(this.regions[this.filter.form.region].districts)
-                    })
-
-                }
-                // Set districts from the URL
-                this.filter.form.districts = this.$route.query.districts || null
+            getDistricts()
+            {
+                // this.$store.commit(START_LOADING)
+                //
+                // this.$axios.get('/api/regions')
+                //     // Success
+                //     .then((res) => {
+                //         // Set data
+                //         this.regions = res.data
+                //         // Set regions from the URL
+                //         this.filter.form.regions = this.$route.query.regions || null
+                //
+                //         this.onRegionChange()
+                //     // Failed
+                //     }).catch((err) => {
+                //         this.PUSH_ERROR_ALERT(err.response)
+                //     // Always
+                //     }).then(()=>{
+                //         this.$store.commit(STOP_LOADING)
+                //     })
             },
             getProperties()
             {
-                // Show the progress bar
-                this.$store.dispatch('loading')
+                this.$store.commit(START_LOADING)
 
-                this.$axios.get('/api/properties', {params: this.filter.form })
+                this.$axios.post('/api/properties', this.filter.form)
                     // Success
                     .then((res) => {
-                        // Hide the progress bar
-                        this.$Progress.finish()
-                        // Set data
                         this.properties = res.data
-                        // Failed
-                    }).catch((err) => {
-                        // Switch to the error progress bar
-                        this.$Progress.fail()
+                    // Failed
+                    }).catch((error) => {
+                        if(error.response !== undefined) Object.assign(this.form.validation.errors, error.response.data.errors)
+
+                        let message = error.response !== undefined ? this.$t(error.response.data.message) : error
+
+                        this.PUSH_ERROR_ALERT(message)
+                    // Always
                     }).then(()=>{
-                        this.$store.dispatch('loading', false)
+                        this.$store.commit(STOP_LOADING)
                     })
             }
         }
@@ -131,18 +117,27 @@
 
 <style lang="scss" scoped>
     .property{
-        &-list{
+        &-list {
             display: grid;
-            grid-template-columns: 1fr 3fr;
+            grid-template-columns: 4fr;
             grid-template-rows: auto;
             grid-gap: 2rem;
         }
-        &-filter{
-            grid-column: 1;
+        &__filter{
+            grid-row: 1;
             margin-bottom: 2rem;
+            form{
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: flex-end;
+                > div{
+                    flex-basis: 20%;
+                }
+            }
         }
         &-cards{
-            grid-column: 2;
+            grid-row: 2;
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             grid-template-rows: auto;

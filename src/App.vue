@@ -20,7 +20,7 @@
 
 <style lang="scss">
     @import '~reset-css';
-    @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,400i,500,500i&display=swap&subset=cyrillic');
+    @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,400i,600,600i&display=swap&subset=cyrillic');
 
     *,
     *::before,
@@ -32,11 +32,21 @@
         font-size: 100%;
         font-family: "IBM Plex Sans", sans-serif;
     }
+    html, body{
+        @include bg('gray--light');
+        @include color('black');
+    }
     button{
         cursor: pointer;
     }
+    h2{
+        font-weight: $bold;
+        font-size: 1.7rem;
+        line-height: 1.4em;
+        margin-bottom: 2rem;
+    }
     h3{
-        font-weight: 500;
+        font-weight: $bold;
         font-size: 1.2rem;
         line-height: 1.4em;
         margin-bottom: 2rem;

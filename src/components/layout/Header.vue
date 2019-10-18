@@ -3,8 +3,7 @@
 <template>
     <header class="header">
         <ui-toolbar
-                brand="Awesome app"
-                remove-brand-divider
+                brand="Application"
                 text-color="white"
                 type="colored"
                 :loading="loading">
@@ -18,7 +17,7 @@
                         @click="stepBack">
                     <font-awesome-icon icon="times"></font-awesome-icon>
                 </ui-icon-button>
-                <router-link v-else to="browser">
+                <router-link v-else :to="{ name: 'browser' }">
                     <ui-icon-button
                             color="white"
                             icon="search"
@@ -29,14 +28,18 @@
                 </router-link>
             </div>
 
+            <div class="locale_switch" @click="toggleLocale" slot="default">
+                {{ languages[locale] }}
+            </div>
+
             <div slot="actions">
-                <nav v-if="user.id === null">
-                    <span>{{ $t('user.name') }}</span>
-                    <router-link :to="{ name: 'login'}">{{ $t('user.login.button') }}</router-link>
+                <nav v-if="isLoggedIn">
+                    <router-link :to="{ name: 'user.profile' }">{{ user.name }}</router-link>
+                    <a href="" @click.prevent="logout">{{ $t('user.logout.button') }}</a>
                 </nav>
                 <nav v-else>
-                    <span>{{ user.name }}</span>
-                    <a href="" @click.prevent="logout">{{ $t('user.logout.button') }}</a>
+                    <span>{{ $t('user.guest') }}</span>
+                    <router-link :to="{ name: 'user.login'}">{{ $t('user.login.button') }}</router-link>
                 </nav>
             </div>
         </ui-toolbar>
@@ -45,10 +48,18 @@
 
 <script>
     import { mapActions } from 'vuex'
-    import { RESET_STORE } from "@/store/types"
+    import { USER_SET, RESET_STORE, SET_LOCALE } from "@/store/types"
 
     export default {
         name: "Header",
+        data(){
+            return {
+                languages: {
+                    ru: 'Русский',
+                    en: 'English'
+                },
+            }
+        },
         computed: {
             loading(){
                 return this.$store.getters.loading
@@ -56,20 +67,42 @@
             isBrowser(){
                 return this.$route.name === 'browser'
             },
+            locale(){
+                return this.$store.getters.locale
+            },
             user(){
                 return this.$store.getters.user
+            },
+            isLoggedIn(){
+                return this.$store.getters.isLoggedIn
             }
+        },
+        created(){
+            this.USER_SET()
+            this.setLocale()
         },
         methods: {
             ...mapActions([
-                RESET_STORE
+                USER_SET,
+                RESET_STORE,
+                SET_LOCALE
             ]),
             stepBack(){
-                window.history.length > 1 ? this.$router.back() : this.$router.push('/')
+                window.history.length > 1 ? this.$router.back() : this.$router.push({ name: 'index' })
+            },
+            setLocale(locale = undefined){
+                this.SET_LOCALE(locale).then(()=>{
+                    this.$root.$i18n.locale = this.$store.getters.locale
+                    this.$moment.locale(this.$store.getters.locale)
+                })
+
+            },
+            toggleLocale(){
+                this.setLocale(_.first(_.xor(_.keys(this.languages), [this.$store.getters.locale])))
             },
             logout(){
                 this.RESET_STORE().then(()=>{
-                    this.$router.push({name: 'login'})
+                    this.$router.push({ name: 'index' })
                 }).catch((error)=>{})
             }
         }
@@ -87,6 +120,9 @@
                 color: white;
                 text-decoration: none;
             }
+        }
+        .locale_switch{
+            cursor: pointer;
         }
     }
 </style>

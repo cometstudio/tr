@@ -1,0 +1,16 @@
+{
+  "en": {
+    "contacts": {
+      "filter": {
+        "placeholder": "Find contact"
+      }
+    }
+  },
+  "ru": {
+    "contacts": {
+      "filter": {
+        "placeholder": "Найти контакт"
+      }
+    }
+  }
+}

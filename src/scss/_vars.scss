@@ -5,7 +5,7 @@ $animationDurationFast: 0.2s;
 /* Color palette */
 $palette: (
     'white': #fff,
-    'black': #404040,
+    'black': #303030,
     'gray': #f6f6f6,
     'gray--dark': #ededed,
     'gray--light': #fbfbfb,
@@ -16,9 +16,17 @@ $palette: (
     'alert': #ff4f58,
 );
 
+/* Font */
+$bold: 600;
+
+/* Margins & Paddings */
+$globalPadding: 2rem;
+
 /* Devices width */
 $tabletsMaxWidth: 1024px;
 $mobileMaxWidth: 768px;
 
 $brand-primary-color: map_get($palette, 'primary');
 $brand-accent-color: map_get($palette, 'secondary');
+
+$ui-input-border-color--invalid: $brand-accent-color;

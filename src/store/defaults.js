@@ -1,3 +1,10 @@
+export const defaultUser = () => {
+    return {
+        id: null,
+        name: '',
+    }
+}
+
 export const defaultState = () => {
     return {
         loading: 0,
@@ -14,13 +21,5 @@ export const defaultAlert = () => {
         message: 'Success',
         type: 'success',
         code: 200,
-    }
-}
-
-export const defaultUser = () => {
-    return {
-        id: null,
-        name: ''
-
     }
 }
